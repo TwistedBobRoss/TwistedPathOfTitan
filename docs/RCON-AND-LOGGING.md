@@ -48,14 +48,14 @@ IP="0.0.0.0"
 
 [SourceRCON]
 bEnabled=true
-bLogging=true
+bLogging={config_parameter id="rcon_log_commands"}
 Password="{gameserver.rcon_password}"
 Port={gameserver.rcon_port}
 IP="0.0.0.0"
-MaxFailedAttempts=5
-Timeout=60
-PageTimeout=5
-MaxConnectionsPerIP=3
+MaxFailedAttempts={config_parameter id="rcon_max_failed_attempts"}
+Timeout={config_parameter id="rcon_timeout"}
+PageTimeout={config_parameter id="rcon_page_timeout"}
+MaxConnectionsPerIP={config_parameter id="rcon_max_connections_per_ip"}
 ```
 
 The RCON password used by GSA must be at least 8 characters long. Alderon recommends 16 or more characters and notes that `"`, `'`, `` ` ``, `=`, and `|` are not allowed in the password.

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+- Added README RCON command and settings reference tables.
+- Expanded Game.ini coverage with granular config template parameters for common host-facing settings.
+- Organized GSA config template parameter names with numbered category prefixes for easier browsing.
+- Updated import, RCON/logging, and marketplace notes for the categorized settings model.
+
 ## 0.2.1
 
 - Set GSA monitoring to Source Query so server health follows the game query port.

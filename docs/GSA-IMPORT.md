@@ -26,6 +26,10 @@ blueprints/path-of-titans-gsa-captain-gecko.json
 | `enforce_whitelist` | Requires `whitelist.txt` entries. |
 | `launch_params` | Passed to Captain Gecko's `EXTRA_ARGS`; defaults wire Source Query and RCON ports/IPs to GSA. |
 
+## Organized Settings
+
+The blueprint exposes granular `Game.ini` controls as GSA config template parameters. To make the setup friendlier for new hosts, every parameter label starts with a numbered category such as `01 Required`, `06 Growth & Death`, or `10 RCON`. This keeps related settings grouped together in the GSA editor while leaving the underlying parameter IDs stable.
+
 ## GSA Directories
 
 The blueprint registers:

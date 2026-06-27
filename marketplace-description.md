@@ -8,7 +8,7 @@ Included:
 - Game, raw, query, and RCON port mappings
 - Editable Path of Titans `Game.ini` and `GameUserSettings.ini`
 - MOTD, rules, commands, and whitelist file entries
-- GSA variables for server name, slots, map, auth token, database mode, password, Discord invite, whitelist toggle, growth/time settings, and launch arguments
+- Numbered, category-grouped GSA settings for required setup, identity, access, time, groups, growth, survival, caves/nesting, world systems, RCON, and advanced lists
 - GSA log source for `\serverfiles\PathOfTitans\Saved\Logs`
 - Source Query and Source RCON configuration
 - Source Query based GSA monitoring with recovery enabled
