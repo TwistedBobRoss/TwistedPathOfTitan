@@ -1,4 +1,4 @@
-# RCON and Logging
+﻿# RCON and Logging
 
 This blueprint keeps Captain Gecko's Docker image unchanged and lets GameServerApp surface the game's native log folder.
 
@@ -16,6 +16,11 @@ The Docker container log still remains useful for image startup, update/install 
 
 ## GSA RCON Wiring
 
+The relevant Alderon hosting docs are:
+
+- Source Query: `https://hosting.pathoftitans.wiki/setup/source-query`
+- Source RCON: `https://hosting.pathoftitans.wiki/setup/source-rcon`
+
 The blueprint declares an RCON Docker port:
 
 ```json
@@ -25,11 +30,13 @@ The blueprint declares an RCON Docker port:
 }
 ```
 
-It passes GSA-owned query/RCON values through Captain Gecko's `EXTRA_ARGS`:
+It passes GSA-owned query/RCON port and bind-IP values through Captain Gecko's `EXTRA_ARGS`:
 
 ```text
--QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -RconPassword={gameserver.rcon_password} -MULTIHOME=0.0.0.0 -log
+-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -log
 ```
+
+The RCON password is written to `Game.ini`, not passed as a launch argument. Alderon's documentation lists command-line overrides for `-RconPort` and `-RconIP`; it documents the password as the `Password` key under `[SourceRCON]`.
 
 The generated `Game.ini` also includes:
 
@@ -50,6 +57,21 @@ Timeout=60
 PageTimeout=5
 MaxConnectionsPerIP=3
 ```
+
+The RCON password used by GSA must be at least 8 characters long. Alderon recommends 16 or more characters and notes that `"`, `'`, `` ` ``, `=`, and `|` are not allowed in the password.
+
+## GSA Monitoring
+
+The blueprint uses Source Query monitoring:
+
+```json
+"monitoring": {
+  "type": "source_query",
+  "recovery_mode": true
+}
+```
+
+GameServerApp's blueprint docs describe Source Query monitoring as checking whether the query port responds. Alderon's Source Query docs require `[SourceQuery]` in `Game.ini` and allow `-QueryPort` / `-QueryIP` command-line overrides, which is how this blueprint lines up GSA's assigned query port with the game server.
 
 ## GSA Commands
 

@@ -1,4 +1,11 @@
-# Changelog
+﻿# Changelog
+
+## 0.2.1
+
+- Set GSA monitoring to Source Query so server health follows the game query port.
+- Kept GSA command/control on `rcon_1`.
+- Aligned launch arguments with Alderon's documented `-QueryPort`, `-QueryIP`, `-RconPort`, and `-RconIP` overrides.
+- Kept the RCON password in `Game.ini` under `[SourceRCON]` and documented Alderon's password requirements.
 
 ## 0.2.0
 

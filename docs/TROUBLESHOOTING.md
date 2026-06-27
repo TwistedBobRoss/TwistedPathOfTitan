@@ -1,4 +1,4 @@
-# Troubleshooting
+﻿# Troubleshooting
 
 ## GSA Only Shows the Container Log
 
@@ -25,12 +25,22 @@ If no files appear there, Captain Gecko's image may only be exposing live stdout
 Check these items:
 
 - The GSA server has an admin/RCON password set.
+- The RCON password is at least 8 characters long and does not contain `"`, `'`, `` ` ``, `=`, or `|`.
 - The `launch_params` parameter still includes `-RconPort={gameserver.rcon_port}`.
-- The `launch_params` parameter still includes `-RconPassword={gameserver.rcon_password}`.
+- The generated `Game.ini` has `[SourceRCON]` with `Password="{gameserver.rcon_password}"`.
 - The generated `Game.ini` has `[SourceRCON]` with `bEnabled=true`.
 - The server was restarted after changing RCON settings.
 - The GSA command/control type is still `rcon_1`.
 - The RCON port is not blocked by host firewall rules.
+
+## Monitoring Shows Offline While Container Is Running
+
+This blueprint uses Source Query monitoring. Check these items:
+
+- The generated `Game.ini` has `[SourceQuery]` with `bEnabled=true`.
+- The `launch_params` parameter still includes `-QueryPort={gameserver.query_port}`.
+- The query port is reachable over UDP.
+- The server has fully finished first boot; Source Query monitoring will not report healthy until the game query service is responding.
 
 ## Server Starts Then Stops
 

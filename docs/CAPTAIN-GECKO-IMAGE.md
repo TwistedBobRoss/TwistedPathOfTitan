@@ -1,4 +1,4 @@
-# Captain Gecko Image Notes
+﻿# Captain Gecko Image Notes
 
 This repository intentionally stays based on Captain Gecko's Windows Path of Titans image:
 
@@ -37,7 +37,7 @@ The blueprint passes:
 | `AG_AUTH_TOKEN` | `{config_parameter id="auth_token"}` |
 | `EXTRA_ARGS` | `{config_parameter id="launch_params"}` |
 
-Query and RCON are passed through `EXTRA_ARGS` so GSA owns the assigned query/RCON ports and password.
+Query and RCON port/IP overrides are passed through `EXTRA_ARGS` so GSA owns the assigned query/RCON ports. The RCON password is written to `Game.ini` under `[SourceRCON]`.
 
 ## If Native Log Files Do Not Appear
 

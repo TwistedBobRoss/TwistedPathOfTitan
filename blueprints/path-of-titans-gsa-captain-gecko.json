@@ -1,4 +1,4 @@
-{
+﻿{
     "_version":  3,
     "type":  "custom",
     "docker":  {
@@ -67,7 +67,7 @@
                                                                      }
                                                     },
                                 "monitoring":  {
-                                                   "type":  "container",
+                                                   "type":  "source_query",
                                                    "recovery_mode":  true
                                                }
                             },
@@ -206,9 +206,9 @@
                                                               },
                                                    "launch_params":  {
                                                                          "name":  "Extra Launch Arguments",
-                                                                         "info":  "Extra startup arguments passed through Captain Gecko pot-server EXTRA_ARGS. The default wires Source Query and Source RCON to GSA-assigned ports and password.",
+                                                                         "info":  "Extra startup arguments passed through Captain Gecko pot-server EXTRA_ARGS. The default wires Source Query and Source RCON to GSA-assigned ports. The RCON password is written to Game.ini.",
                                                                          "type":  "text",
-                                                                         "content":  "-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -RconPassword={gameserver.rcon_password} -MULTIHOME=0.0.0.0 -log"
+                                                                         "content":  "-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -log"
                                                                      },
                                                    "allowed_character_a":  {
                                                                                "content":  "",

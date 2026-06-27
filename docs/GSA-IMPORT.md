@@ -1,4 +1,4 @@
-# GameServerApp Import Guide
+﻿# GameServerApp Import Guide
 
 Import this file as a custom Docker blueprint:
 
@@ -24,7 +24,7 @@ blueprints/path-of-titans-gsa-captain-gecko.json
 | `reserved_slots` | Number of reserved slots for admins or roles. |
 | `server_discord_invite_code` | Invite code only, not the full Discord URL. |
 | `enforce_whitelist` | Requires `whitelist.txt` entries. |
-| `launch_params` | Passed to Captain Gecko's `EXTRA_ARGS`; defaults wire Source Query and RCON to GSA. |
+| `launch_params` | Passed to Captain Gecko's `EXTRA_ARGS`; defaults wire Source Query and RCON ports/IPs to GSA. |
 
 ## GSA Directories
 
@@ -39,7 +39,7 @@ The `logs` type is important. It lets GameServerApp list native Path of Titans l
 
 ## First Boot
 
-Use container monitoring for first boot. The first start can take several minutes if the image downloads or updates server files.
+The blueprint uses Source Query monitoring. The first start can take several minutes if the image downloads or updates server files, and monitoring will not show healthy until the game query service responds.
 
 Recommended first checks:
 

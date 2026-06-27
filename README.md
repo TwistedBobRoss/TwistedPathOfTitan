@@ -1,4 +1,4 @@
-# Twisted Path of Titans
+﻿# Twisted Path of Titans
 
 GameServerApp blueprint files for hosting Path of Titans community servers with Captain Gecko's Windows Docker image.
 
@@ -16,6 +16,7 @@ Credit to Captain Gecko for the Windows Path of Titans Docker image this bluepri
 - Editable `Game.ini`, `GameUserSettings.ini`, MOTD, rules, commands, and whitelist files in GSA.
 - Registers `\serverfiles\PathOfTitans\Saved\Logs` as a GSA `logs` directory so native Path of Titans logs can appear separately from the container log.
 - Source Query and Source RCON wired to GSA-assigned ports.
+- GSA monitoring configured to use Source Query with recovery enabled.
 - GSA command/control configured through `rcon_1`.
 - GSA tasks can handle routine restarts while Path of Titans internal restarts stay disabled by default.
 
@@ -77,13 +78,15 @@ That gives GameServerApp a separate log directory from the Docker container log 
 
 ## RCON Model
 
-The blueprint passes GSA's query/RCON values through Captain Gecko's `EXTRA_ARGS`:
+The blueprint passes GSA's query/RCON port and bind-IP values through Captain Gecko's `EXTRA_ARGS`:
 
 ```text
--QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -RconPassword={gameserver.rcon_password} -MULTIHOME=0.0.0.0 -log
+-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -log
 ```
 
-The generated `Game.ini` also includes `[SourceQuery]` and `[SourceRCON]` sections using GSA variables.
+The generated `Game.ini` also includes `[SourceQuery]` and `[SourceRCON]` sections using GSA variables, including the RCON password.
+
+GSA monitoring uses Source Query so the dashboard checks the game query port, not only whether the Docker container is running.
 
 GSA command/control uses:
 
