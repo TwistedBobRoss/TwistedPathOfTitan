@@ -1,0 +1,23 @@
+# Local server/runtime data
+serverfiles/
+PathOfTitans/
+Saved/
+Logs/
+
+# Downloaded binaries
+AlderonGamesCmd-Win64.exe
+
+# Build/temp output
+*.log
+*.tmp
+*.bak
+*.zip
+*.7z
+*.tar
+*.gz
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
