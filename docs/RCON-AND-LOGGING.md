@@ -1,32 +1,18 @@
 # RCON and Logging
 
-This project separates game logging from the Docker container log while keeping the container log useful.
+This blueprint keeps Captain Gecko's Docker image unchanged and lets GameServerApp surface the game's native log folder.
 
-## Dedicated Game Log
+## Native Game Logs
 
-The launcher writes server stdout/stderr to:
-
-```text
-C:\serverfiles\PathOfTitans\Saved\Logs\PathOfTitansServer-GSA.log
-```
-
-In GSA this appears under:
-
-```text
-\serverfiles\PathOfTitans\Saved\Logs\PathOfTitansServer-GSA.log
-```
-
-The same output is also mirrored to Docker stdout with `Tee-Object`, so startup failures still appear in the container log.
-
-## Native Path of Titans Logs
-
-Path of Titans may also create native Unreal logs under:
+The blueprint registers this folder as a GSA log source:
 
 ```text
 \serverfiles\PathOfTitans\Saved\Logs
 ```
 
-The blueprint registers the whole folder as a GSA `logs` directory, so both wrapper-created and native logs can be surfaced by GameServerApp.
+Path of Titans/Unreal log files created in that folder should appear separately from the Docker container log on the GSA Logs page.
+
+The Docker container log still remains useful for image startup, update/install output, and early failures before the game process starts.
 
 ## GSA RCON Wiring
 
@@ -39,24 +25,20 @@ The blueprint declares an RCON Docker port:
 }
 ```
 
-It passes GSA-owned values into the container:
-
-```json
-"RCON_PORT": "{gameserver.rcon_port}",
-"RCON_PASSWORD": "{gameserver.rcon_password}"
-```
-
-The launcher starts Path of Titans with:
+It passes GSA-owned query/RCON values through Captain Gecko's `EXTRA_ARGS`:
 
 ```text
--RconPort=$RconPort
--RconIP=0.0.0.0
--RconPassword=$RconPassword
+-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -RconPassword={gameserver.rcon_password} -MULTIHOME=0.0.0.0 -log
 ```
 
 The generated `Game.ini` also includes:
 
 ```ini
+[SourceQuery]
+bEnabled=true
+Port={gameserver.query_port}
+IP="0.0.0.0"
+
 [SourceRCON]
 bEnabled=true
 bLogging=true
@@ -89,8 +71,8 @@ Suggested acceptance tests:
 - Send a GSA broadcast and confirm it appears in-game.
 - Run save from GSA and check the command succeeds.
 - Stop from GSA and confirm the container exits cleanly.
-- Check whether RCON commands appear in `PathOfTitansServer-GSA.log` or native Path of Titans logs.
+- Check whether RCON commands appear in native Path of Titans logs.
 
 ## Known Limit
 
-No confirmed Path of Titans setting was found for a dedicated SourceRCON-only log file path. This project avoids invented `LogFilePath` keys and instead captures the server process output into a GSA-visible game log.
+This blueprint does not create a separate process-capture log because it does not replace Captain Gecko's image. If Captain Gecko's image only exposes stdout and does not leave native log files in `Saved\Logs`, the next step is to test Captain Gecko image-supported launch args while keeping this blueprint Captain-Gecko-based.

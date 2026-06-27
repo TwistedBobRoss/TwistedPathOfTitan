@@ -1,22 +1,21 @@
 # Twisted Path of Titans
 
-Windows Docker and GameServerApp blueprint files for hosting Path of Titans community servers.
+GameServerApp blueprint files for hosting Path of Titans community servers with Captain Gecko's Windows Docker image.
 
-This project packages a GameServerApp-ready Path of Titans server using a Windows Server Core container, AlderonGamesCmd updates, editable Path of Titans config templates, GSA-visible game logs, and GSA RCON command/control wiring.
+This project stays based on `captaingecko/pot-server:windows`. It does not build or publish a replacement Docker image. The blueprint focuses on editable Path of Titans config templates, GSA-visible native game logs, and GSA RCON command/control wiring.
 
-This is a community project and is not an official Alderon Games image.
+This is a community blueprint and is not an official Alderon Games or Captain Gecko project.
+
+Credit to Captain Gecko for the Windows Path of Titans Docker image this blueprint is built around.
 
 ## Features
 
 - GameServerApp custom Docker blueprint for Path of Titans.
-- Windows Server Core LTSC 2022 container image.
-- AlderonGamesCmd install/update on container start.
-- Persistent server data under `\serverfiles`.
+- Uses Captain Gecko's Docker image: `captaingecko/pot-server:windows`.
+- Persistent server data mounted under `\serverfiles`.
 - Editable `Game.ini`, `GameUserSettings.ini`, MOTD, rules, commands, and whitelist files in GSA.
-- Dedicated GSA game log file:
-  `\serverfiles\PathOfTitans\Saved\Logs\PathOfTitansServer-GSA.log`
-- Game output still mirrors to the Docker container log for live startup/debug visibility.
-- Source Query and Source RCON settings wired to GSA-assigned ports.
+- Registers `\serverfiles\PathOfTitans\Saved\Logs` as a GSA `logs` directory so native Path of Titans logs can appear separately from the container log.
+- Source Query and Source RCON wired to GSA-assigned ports.
 - GSA command/control configured through `rcon_1`.
 - GSA tasks can handle routine restarts while Path of Titans internal restarts stay disabled by default.
 
@@ -24,14 +23,10 @@ This is a community project and is not an official Alderon Games image.
 
 ```text
 blueprints/
-  path-of-titans-gsa-windows-logging-rcon.json
-
-docker/windows/ltsc2022/
-  Dockerfile
-  Start.ps1
+  path-of-titans-gsa-captain-gecko.json
 
 docs/
-  BUILD-AND-PUBLISH.md
+  CAPTAIN-GECKO-IMAGE.md
   GSA-IMPORT.md
   RCON-AND-LOGGING.md
   TROUBLESHOOTING.md
@@ -42,18 +37,10 @@ CHANGELOG.md
 
 ## Quick Start
 
-Build and push the Windows image:
-
-```powershell
-docker login ghcr.io
-docker build -f docker/windows/ltsc2022/Dockerfile -t ghcr.io/twistedbobross/twistedpathoftitan:windows-ltsc2022 docker/windows/ltsc2022
-docker push ghcr.io/twistedbobross/twistedpathoftitan:windows-ltsc2022
-```
-
 Import this blueprint into GameServerApp:
 
 ```text
-blueprints/path-of-titans-gsa-windows-logging-rcon.json
+blueprints/path-of-titans-gsa-captain-gecko.json
 ```
 
 Set the required GSA config values:
@@ -65,8 +52,8 @@ Set the required GSA config values:
 
 Start the server once and check:
 
-- Docker container log for install/startup progress.
-- GSA Logs page for `PathOfTitansServer-GSA.log`.
+- Docker container log for Captain Gecko image startup progress.
+- GSA Logs page for native Path of Titans logs under `Saved\Logs`.
 - GSA RCON command/control with save, broadcast, and stop.
 
 ## Ports
@@ -74,34 +61,29 @@ Start the server once and check:
 | GSA type | Default | Protocol | Purpose |
 | --- | ---: | --- | --- |
 | `game` | `7777` | UDP | Path of Titans game traffic |
-| `raw` | `7778` | TCP/UDP image-dependent | Extra mapped game/raw port |
+| `raw` | `7778` | image-dependent | Extra raw/game port exposed by the image |
 | `query` | `27015` | UDP | Source Query |
 | `rcon` | `37015` | TCP | Source RCON for GSA |
 
 ## Logging Model
 
-The launcher writes server stdout/stderr to:
+The blueprint registers this folder as a GSA log source:
 
 ```text
-\serverfiles\PathOfTitans\Saved\Logs\PathOfTitansServer-GSA.log
+\serverfiles\PathOfTitans\Saved\Logs
 ```
 
-The same stream is mirrored to Docker stdout, so the container log still works. The blueprint registers `\serverfiles\PathOfTitans\Saved\Logs` as a GSA `logs` directory so GameServerApp can list the game log separately from the container log.
-
-Path of Titans may also create native Unreal logs in the same `Saved\Logs` directory.
+That gives GameServerApp a separate log directory from the Docker container log while still using Captain Gecko's image unchanged. The server must actually write native Path of Titans/Unreal logs there; if live testing shows only container stdout is available, the next step is to test Captain Gecko image-supported startup arguments while keeping this blueprint on the Captain Gecko image.
 
 ## RCON Model
 
-The blueprint maps GSA's RCON port and password into both the container environment and the generated `Game.ini`.
+The blueprint passes GSA's query/RCON values through Captain Gecko's `EXTRA_ARGS`:
 
-```ini
-[SourceRCON]
-bEnabled=true
-bLogging=true
-Password="{gameserver.rcon_password}"
-Port={gameserver.rcon_port}
-IP="0.0.0.0"
+```text
+-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -RconPassword={gameserver.rcon_password} -MULTIHOME=0.0.0.0 -log
 ```
+
+The generated `Game.ini` also includes `[SourceQuery]` and `[SourceRCON]` sections using GSA variables.
 
 GSA command/control uses:
 
@@ -111,11 +93,9 @@ GSA command/control uses:
 | Broadcast | `Announce {message}` |
 | Stop | `ProfileServer Stop` |
 
-Live GSA acceptance testing is still recommended after pushing the image, because GSA's internal RCON implementation names are not publicly mapped in detail.
-
 ## Documentation
 
-- [Build and publish](docs/BUILD-AND-PUBLISH.md)
+- [Captain Gecko image notes](docs/CAPTAIN-GECKO-IMAGE.md)
 - [GSA import guide](docs/GSA-IMPORT.md)
 - [RCON and logging](docs/RCON-AND-LOGGING.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
