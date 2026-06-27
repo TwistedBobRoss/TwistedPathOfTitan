@@ -1,4 +1,4 @@
-﻿Twisted Path of Titans is a GameServerApp blueprint for hosting Path of Titans community servers with Captain Gecko's Windows Docker image.
+Twisted Path of Titans is a GameServerApp blueprint for hosting Path of Titans community servers with Captain Gecko's Windows Docker image.
 
 Built by TwistedBobRoss, this blueprint gives server owners a clean starting point for running Path of Titans through GameServerApp with editable configuration files, persistent server data, GSA-visible native game logs, and GSA RCON command/control wiring.
 

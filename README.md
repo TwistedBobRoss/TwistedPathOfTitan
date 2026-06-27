@@ -1,4 +1,4 @@
-﻿# Twisted Path of Titans
+# Twisted Path of Titans
 
 GameServerApp blueprint files for hosting Path of Titans community servers with Captain Gecko's Windows Docker image.
 

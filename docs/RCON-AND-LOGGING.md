@@ -1,4 +1,4 @@
-﻿# RCON and Logging
+# RCON and Logging
 
 This blueprint keeps Captain Gecko's Docker image unchanged and lets GameServerApp surface the game's native log folder.
 

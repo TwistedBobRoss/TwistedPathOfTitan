@@ -1,4 +1,4 @@
-﻿# Captain Gecko Image Notes
+# Captain Gecko Image Notes
 
 This repository intentionally stays based on Captain Gecko's Windows Path of Titans image:
 

@@ -1,4 +1,4 @@
-﻿# GameServerApp Import Guide
+# GameServerApp Import Guide
 
 Import this file as a custom Docker blueprint:
 
