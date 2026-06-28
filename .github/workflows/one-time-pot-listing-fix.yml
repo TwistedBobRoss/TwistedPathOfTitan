@@ -1,10 +1,8 @@
 name: Repair invalid GSA section labels
 
 on:
-  push:
-    paths:
-      - .github/workflows/one-time-pot-listing-fix.yml
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - .github/workflows/one-time-pot-listing-fix.yml
 
@@ -46,4 +44,4 @@ jobs:
               sha: current.data.sha,
               branch: 'main'
             });
-            // Runs the one-time validator repair on the full existing blueprint.
+            // Runs once when the temporary verification PR is marked ready.
