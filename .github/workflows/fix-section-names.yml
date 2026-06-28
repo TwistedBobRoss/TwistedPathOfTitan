@@ -1,0 +1,56 @@
+name: Fix GSA section names
+
+on:
+  push:
+    branches:
+      - codex/fix-source-query-monitoring
+    paths:
+      - .github/workflows/fix-section-names.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix-section-names:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/fix-source-query-monitoring
+
+      - name: Replace invalid section characters
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('blueprints/path-of-titans-gsa-captain-gecko.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          replacements = {
+              'Growth & Death': 'Growth and Death',
+              'World & Survival': 'World and Survival',
+              'Caves & Nesting': 'Caves and Nesting',
+              'Chat & Webhooks': 'Chat and Webhooks',
+          }
+          changed = 0
+          for parameter in data['game']['config']['parameters'].values():
+              old = parameter.get('section')
+              if old in replacements:
+                  parameter['section'] = replacements[old]
+                  changed += 1
+          if not changed:
+              raise SystemExit('No invalid section labels found')
+          path.write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')
+          print(f'Updated {changed} section labels.')
+          PY
+
+      - name: Commit corrected blueprint
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add blueprints/path-of-titans-gsa-captain-gecko.json
+          git commit -m "Fix invalid GSA section names"
+          git push
