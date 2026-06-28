@@ -62,11 +62,11 @@ The RCON password used by GSA must be at least 8 characters long. Alderon recomm
 
 ## GSA Monitoring
 
-The blueprint uses Source Query monitoring:
+The blueprint uses Source Query monitoring through GSA's `query` monitoring enum:
 
 ```json
 "monitoring": {
-  "type": "source_query",
+  "type": "query",
   "recovery_mode": true
 }
 ```
