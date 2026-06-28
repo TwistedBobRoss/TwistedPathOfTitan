@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Corrected the GameServerApp Source Query monitoring enum from `source_query` to `query`.
+- Added GSA config-template sections so Path of Titans settings appear in organized tabs.
+- Added a Chat & Webhooks section with optional Path of Titans native chat, command, report, login, logout, death, admin-command, server-error, and security-alert webhook settings.
+
 ## 0.3.1
 
 - Normalized config parameter IDs to use only letters and underscores for GameServerApp editor compatibility.
