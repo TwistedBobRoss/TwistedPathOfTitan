@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Fixed the max complete quests config reference to use max_complete_quests_in_location. 
+- Fixed the max complete quests config reference to use `max_complete_quests_in_location`.
 - Documented marketplace-first GSA implementation instructions in the README and import guide.
 - Corrected the GameServerApp Source Query monitoring enum from `source_query` to `query`.
 - Updated RCON/logging documentation to show GSA's `query` monitoring enum.
