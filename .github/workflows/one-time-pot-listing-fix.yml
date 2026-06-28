@@ -26,7 +26,7 @@ jobs:
             let text = Buffer.from(current.data.content, 'base64').toString('utf8');
             if (text.includes('community_server_listing_ip')) return;
             const oldArgs = '-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -log';
-            const newArgs = '-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={config_parameter id="community_server_listing_ip"} -log';
+            const newArgs = '-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={config_parameter id=\\"community_server_listing_ip\\"} -log';
             if (!text.includes(oldArgs)) {
               core.setFailed('Original launch parameter string was not found.');
               return;
@@ -47,4 +47,3 @@ jobs:
               sha: current.data.sha,
               branch: 'main'
             });
-            // Triggered from an internal verification pull request.
