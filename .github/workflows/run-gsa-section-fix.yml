@@ -21,7 +21,8 @@ jobs:
             const replacements = [
               ['"section":"Growth & Death"', '"section":"Growth and Death"'],
               ['"section":"World & Survival"', '"section":"World and Survival"'],
-              ['"section":"Caves & Nesting"', '"section":"Caves and Nesting"']
+              ['"section":"Caves & Nesting"', '"section":"Caves and Nesting"'],
+              ['"section":"Chat & Webhooks"', '"section":"Chat and Webhooks"']
             ];
             for (const [from, to] of replacements) text = text.replaceAll(from, to);
             const invalid = [...text.matchAll(/"section":"([^"]*)"/g)]
