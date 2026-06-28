@@ -4,6 +4,7 @@
 
 - Documented marketplace-first GSA implementation instructions in the README and import guide.
 - Corrected the GameServerApp Source Query monitoring enum from `source_query` to `query`.
+- Updated RCON/logging documentation to show GSA's `query` monitoring enum.
 - Added GSA config-template sections so Path of Titans settings appear in organized tabs.
 - Renamed section labels to use only GameServerApp-supported characters, replacing ampersands with `and`.
 - Added a Chat and Webhooks section with optional Path of Titans native chat, command, report, login, logout, death, admin-command, server-error, and security-alert webhook settings.
