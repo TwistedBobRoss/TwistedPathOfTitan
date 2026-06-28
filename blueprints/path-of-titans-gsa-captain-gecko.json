@@ -25,14 +25,14 @@
       "tag": "windows"
     },
     "envs": {
-      "GUID": "{config_parameter id=\"server_guid\"}",
+      "GUID": "{helper.uuid}",
       "DATABASE": "{config_parameter id=\"database\"}",
       "GAME_PORT": "{gameserver.game_port}",
       "BRANCH": "{config_parameter id=\"branch\"}",
       "SERVER_NAME": "{gameserver.list_name}",
       "MAX_PLAYERS": "{gameserver.slot_limit}",
       "AG_AUTH_TOKEN": "{config_parameter id=\"auth_token\"}",
-      "EXTRA_ARGS": "{config_parameter id=\"launch_params\"}"
+      "EXTRA_ARGS": "-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={machine.ip} -log {config_parameter id=\"launch_params\"}"
     },
     "mounts": {
       "{container.home_root}/serverfiles": "c:/serverfiles"
@@ -113,11 +113,9 @@
       },
       "parameters": {
         "auth_token": {"name":"Alderon Auth Token","info":"Required. Alderon Games auth token used by AlderonGamesCmd to install and update Path of Titans server files.","section":"Server Setup","type":"text","content":""},
-        "server_guid": {"name":"Server GUID","info":"Unique UUIDv4 for this Path of Titans server. Keep {helper.uuid} unless you need a fixed identity across rebuilds.","section":"Server Setup","type":"text","content":"{helper.uuid}"},
         "database": {"name":"Database Mode","info":"Passed to Captain Gecko pot-server as DATABASE. Use Remote for most community servers; Local is only for local database setups.","section":"Server Setup","type":"array","dropdown":"{\"Remote\":\"Remote\",\"Local\":\"Local\"}"},
         "branch": {"name":"Branch","info":"Path of Titans branch key. Usually production.","section":"Server Setup","type":"text","content":"production"},
-        "launch_params": {"name":"Extra Launch Arguments","info":"Passed through Captain Gecko pot-server EXTRA_ARGS. Default wires Source Query and Source RCON ports/IPs to GSA. Leave unchanged unless troubleshooting.","section":"Server Setup","type":"text","content":"-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={config_parameter id=\"community_server_listing_ip\"} -log"},
-        "community_server_listing_ip": {"name":"Show as Community Server","info":"Public IP used when registering this server in the Path of Titans Community Server list. Leave the default value in place to show online; clear it only for a direct-connect/private server.","section":"Server Setup","type":"text","content":"{machine.ip}"},
+        "launch_params": {"name":"Extra Launch Arguments","info":"Optional extra Path of Titans launch arguments. Required GSA ports, public listing IP, and logging are already added by the blueprint; add only additional literal arguments here.","section":"Server Setup","type":"text","content":""},
         "map": {"name":"Map","info":"Path of Titans internal map name. Use Island for Gondwa, Panjura for Panjura, Riparia for Riparia, or the exact modded map name.","section":"Game","type":"text","content":"Island"},
         "server_password": {"name":"Server Password","info":"Optional join password. Leave blank for public access.","section":"Access","type":"text","content":""},
         "reserved_slots": {"name":"Reserved/Admin Slots","info":"Number of slots reserved exclusively for admins or reserved-slot roles.","section":"Access","type":"text","content":"0"},
