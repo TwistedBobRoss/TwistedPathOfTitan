@@ -47,3 +47,4 @@ jobs:
               sha: current.data.sha,
               branch: 'main'
             });
+            // Triggered from an internal verification pull request.
