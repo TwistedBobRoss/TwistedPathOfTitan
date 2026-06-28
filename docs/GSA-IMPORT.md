@@ -1,6 +1,8 @@
-# GameServerApp Import Guide
+# GameServerApp Implementation Guide
 
-Import this file as a custom Docker blueprint:
+For normal hosting, download the Twisted Path of Titans blueprint from the GameServerApp Marketplace in GSA. Use this repository copy only for source review, manual import testing, or development.
+
+Manual import fallback:
 
 ```text
 blueprints/path-of-titans-gsa-captain-gecko.json

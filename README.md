@@ -31,20 +31,21 @@ docs/
   GSA-IMPORT.md
   RCON-AND-LOGGING.md
   TROUBLESHOOTING.md
+  WEBHOOKS.md
 
 marketplace-description.md
 CHANGELOG.md
 ```
 
+## GSA Implementation
+
+For normal hosting, download the Twisted Path of Titans blueprint from the GameServerApp Marketplace in GSA. Use the marketplace copy as the supported implementation path so hosts receive the packaged blueprint metadata and versioned updates.
+
+Use `blueprints/path-of-titans-gsa-captain-gecko.json` from this repository only for manual import testing, review, or development.
+
 ## Quick Start
 
-Import this blueprint into GameServerApp:
-
-```text
-blueprints/path-of-titans-gsa-captain-gecko.json
-```
-
-Set the required GSA config values:
+After downloading the blueprint from the GSA Marketplace, create a server from it and set the required GSA config values:
 
 - `auth_token`: Alderon/Path of Titans auth token.
 - `server_guid`: keep the default `{helper.uuid}` unless you need a fixed identity.
@@ -197,6 +198,7 @@ Common beginner-safe settings:
 - [GSA import guide](docs/GSA-IMPORT.md)
 - [RCON and logging](docs/RCON-AND-LOGGING.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Webhooks](docs/WEBHOOKS.md)
 
 ## License
 

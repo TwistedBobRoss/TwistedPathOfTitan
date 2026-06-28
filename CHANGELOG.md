@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Documented marketplace-first GSA implementation instructions in the README and import guide.
 - Corrected the GameServerApp Source Query monitoring enum from `source_query` to `query`.
 - Added GSA config-template sections so Path of Titans settings appear in organized tabs.
 - Renamed section labels to use only GameServerApp-supported characters, replacing ampersands with `and`.
