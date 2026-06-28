@@ -4,6 +4,10 @@ on:
   push:
     paths:
       - .github/workflows/one-time-pot-listing-fix.yml
+  pull_request:
+    paths:
+      - README.md
+      - .github/workflows/one-time-pot-listing-fix.yml
 
 permissions:
   contents: write
@@ -43,4 +47,3 @@ jobs:
               sha: current.data.sha,
               branch: 'main'
             });
-            // This comment intentionally changes the workflow file to invoke the one-time repair.
