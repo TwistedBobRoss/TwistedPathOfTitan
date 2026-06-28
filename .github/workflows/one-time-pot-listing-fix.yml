@@ -23,17 +23,17 @@ jobs:
             if (text.includes('community_server_listing_ip')) return;
             const oldArgs = '-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -log';
             const newArgs = '-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={config_parameter id="community_server_listing_ip"} -log';
-            if (!text.includes(oldArgs)) core.setFailed('Original launch parameter string was not found.');
+            if (!text.includes(oldArgs)) {
+              core.setFailed('Original launch parameter string was not found.');
+              return;
+            }
             text = text.replace(oldArgs, newArgs);
-            const marker = '        "map": {\n';
-            const setting = '        "community_server_listing_ip": {\n' +
-              '          "name": "Show as Community Server",\n' +
-              '          "info": "Public IP used when registering this server in the Path of Titans Community Server list. Leave the default value in place to show online; clear it only for a direct-connect/private server.",\n' +
-              '          "section": "Server Setup",\n' +
-              '          "type": "text",\n' +
-              '          "content": "{machine.ip}"\n' +
-              '        },\n';
-            if (!text.includes(marker)) core.setFailed('Original parameter insertion marker was not found.');
+            const marker = '        "map": {';
+            const setting = '        "community_server_listing_ip": {"name":"Show as Community Server","info":"Public IP used when registering this server in the Path of Titans Community Server list. Leave the default value in place to show online; clear it only for a direct-connect/private server.","section":"Server Setup","type":"text","content":"{machine.ip}"},\n';
+            if (!text.includes(marker)) {
+              core.setFailed('Original parameter insertion marker was not found.');
+              return;
+            }
             text = text.replace(marker, setting + marker);
             JSON.parse(text);
             await github.rest.repos.createOrUpdateFileContents({
@@ -43,3 +43,4 @@ jobs:
               sha: current.data.sha,
               branch: 'main'
             });
+            // This comment intentionally changes the workflow file to invoke the one-time repair.
