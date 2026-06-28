@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Documented Path of Titans admin setup, ServerAdmins lines, and more-than-two-admin guidance in the README.
 - Fixed the max complete quests config reference to use `max_complete_quests_in_location`.
 - Documented marketplace-first GSA implementation instructions in the README and import guide.
 - Corrected the GameServerApp Source Query monitoring enum from `source_query` to `query`.

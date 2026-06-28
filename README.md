@@ -97,6 +97,51 @@ GSA command/control uses:
 | Broadcast | `Announce {message}` |
 | Stop | `ProfileServer Stop` |
 
+## Admin Setup
+
+Path of Titans supports two admin workflows. Use the `Game.ini` method for permanent or bulk admins, and use `Promote` / `Demote` when you need to adjust admin roles while the server is running.
+
+### Permanent Admins in Game.ini
+
+Stop the server before editing config files. In GSA, open the generated `Game.ini` template at:
+
+```text
+\serverfiles\PathOfTitans\Saved\Config\WindowsServer\Game.ini
+```
+
+Under `[/Script/PathOfTitans.IGameSession]`, add one `ServerAdmins=<AGID>` line per admin. Alderon documents this as one player per line, and additional admins are added by adding additional lines.
+
+```ini
+[/Script/PathOfTitans.IGameSession]
+ServerAdmins=048-236-424
+; Community manager
+ServerAdmins=123-456-789
+ServerAdmins=543-226-532
+```
+
+The blueprint includes two starter fields, `server_admin_agid_a` and `server_admin_agid_b`, plus matching commented `ServerAdmins=` example lines in `Game.ini`. Fill those fields if you want, then uncomment the matching `ServerAdmins=` lines in `Game.ini`.
+
+### More Than Two Admins
+
+The two starter fields are convenience slots, not a Path of Titans limit. For more than two admins, add more `ServerAdmins=<AGID>` lines manually under the same `[/Script/PathOfTitans.IGameSession]` header. Keep one AGID per line and restart the server after saving.
+
+### Live Admin Role Changes
+
+You can also assign or remove admin roles while the server is running:
+
+```text
+/promote <Username/AGID> <adminrole>
+/demote <Username/AGID>
+```
+
+Through RCON, send the same commands without `/`:
+
+```text
+Promote <Username/AGID> <adminrole>
+Demote <Username/AGID>
+```
+
+Admin roles and permissions are controlled in `Commands.ini`. Use `ListRoles` to see configured roles, and only grant roles to trusted players.
 ## RCON Command Reference
 
 Path of Titans Source RCON accepts the same style of commands listed in Alderon's admin command docs, but RCON commands are sent without a leading `/` or `#`. For example, send `TeleportAll talonspoint`, not `/teleportall talonspoint`.
