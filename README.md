@@ -148,7 +148,7 @@ Official references:
 
 ## Settings Reference
 
-GameServerApp's public blueprint docs expose config template parameters as ID, name, info, type, and default content. Since no per-parameter tab field is documented, this blueprint organizes the GSA config template with numbered category prefixes in each parameter name. The prefixes keep related settings together while preserving stable parameter IDs for `Game.ini`.
+GameServerApp's public blueprint docs expose config template parameters as ID, name, info, type, and default content. Since no per-parameter tab field is documented, this blueprint organizes the GSA config template with numbered category prefixes in each parameter name. The prefixes keep related settings together while preserving stable parameter IDs for `Game.ini`. Parameter IDs intentionally use only letters and underscores for GSA editor compatibility.
 
 | Prefix | Category | Typical Settings |
 | --- | --- | --- |

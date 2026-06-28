@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- Normalized config parameter IDs to use only letters and underscores for GameServerApp editor compatibility.
+
 ## 0.3.0
 
 - Added README RCON command and settings reference tables.

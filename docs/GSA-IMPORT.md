@@ -28,7 +28,7 @@ blueprints/path-of-titans-gsa-captain-gecko.json
 
 ## Organized Settings
 
-The blueprint exposes granular `Game.ini` controls as GSA config template parameters. To make the setup friendlier for new hosts, every parameter label starts with a numbered category such as `01 Required`, `06 Growth & Death`, or `10 RCON`. This keeps related settings grouped together in the GSA editor while leaving the underlying parameter IDs stable.
+The blueprint exposes granular `Game.ini` controls as GSA config template parameters. To make the setup friendlier for new hosts, every parameter label starts with a numbered category such as `01 Required`, `06 Growth & Death`, or `10 RCON`. This keeps related settings grouped together in the GSA editor while leaving the underlying parameter IDs stable. Parameter IDs use only letters and underscores for GSA editor compatibility.
 
 ## GSA Directories
 
