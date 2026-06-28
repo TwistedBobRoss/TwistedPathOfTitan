@@ -43,3 +43,4 @@ jobs:
               sha: current.data.sha,
               branch: 'main'
             });
+            // Triggered after confirming the GSA validator error.
