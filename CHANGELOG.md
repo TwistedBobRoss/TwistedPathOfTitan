@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Moved query/RCON port injection out of Captain Gecko `EXTRA_ARGS` and into the generated `[SourceQuery]` / `[SourceRCON]` `Game.ini` sections to prevent unresolved `{gameserver...}` placeholders in startup logs.
+- Activated the two `ServerAdmins=` template lines so the admin AGID fields actually grant permanent admin status after `Game.ini` is regenerated and the server restarts.
 - Renamed the editable startup argument field to `additional_launch_params` so old saved `launch_params` values cannot append unresolved query/RCON placeholders after the resolved GSA ports.
 - Fixed the `MaxCompleteQuestsInLocation` config parameter reference after remote edits.
 - Documented Path of Titans MOTD and Rules formatting: no Markdown/HTML, one Alderon tag at a time, close with `</>`.

@@ -30,15 +30,15 @@ The blueprint declares an RCON Docker port:
 }
 ```
 
-It passes GSA-owned query/RCON port and bind-IP values through Captain Gecko's `EXTRA_ARGS`:
+Captain Gecko's `EXTRA_ARGS` is intentionally kept minimal:
 
 ```text
--QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={machine.ip} -log {config_parameter id="additional_launch_params"}
+-log {config_parameter id="additional_launch_params"}
 ```
 
-The editable `additional_launch_params` value must stay blank unless you are adding unrelated literal startup flags. Do not put query/RCON placeholders in that field; otherwise they can be appended literally after the resolved port values.
+The editable `additional_launch_params` value must stay blank unless you are adding unrelated literal startup flags. Do not put query/RCON placeholders in that field; otherwise they can be appended literally by the image.
 
-The RCON password is written to `Game.ini`, not passed as a launch argument. Alderon's documentation lists command-line overrides for `-RconPort` and `-RconIP`; it documents the password as the `Password` key under `[SourceRCON]`.
+The query port, RCON port, bind IPs, and RCON password are written to `Game.ini`, not passed as launch arguments. Alderon's documentation supports `[SourceQuery]` and `[SourceRCON]` config sections, and this avoids unresolved `{gameserver...}` placeholders appearing in the container startup command.
 
 The generated `Game.ini` also includes:
 
@@ -73,7 +73,7 @@ The blueprint uses Source Query monitoring:
 }
 ```
 
-GameServerApp's blueprint docs describe Source Query monitoring as checking whether the query port responds. Alderon's Source Query docs require `[SourceQuery]` in `Game.ini` and allow `-QueryPort` / `-QueryIP` command-line overrides, which is how this blueprint lines up GSA's assigned query port with the game server.
+GameServerApp's blueprint docs describe Source Query monitoring as checking whether the query port responds. Alderon's Source Query docs require `[SourceQuery]` in `Game.ini`, which is how this blueprint lines up GSA's assigned query port with the game server.
 
 ## GSA Commands
 

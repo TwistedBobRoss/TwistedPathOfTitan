@@ -1,260 +1,1105 @@
 {
-  "_version": 3,
-  "type": "custom",
-  "docker": {
-    "ports": {
-      "query": {
-        "port": "27015",
-        "multiplier": "1"
-      },
-      "game": {
-        "port": "7777",
-        "multiplier": "2"
-      },
-      "raw": {
-        "port": "7778",
-        "multiplier": "2"
-      },
-      "rcon": {
-        "port": "37015",
-        "multiplier": "1"
-      }
-    },
-    "image": {
-      "name": "captaingecko/pot-server",
-      "tag": "windows"
-    },
-    "envs": {
-      "GUID": "{helper.uuid}",
-      "DATABASE": "{config_parameter id=\"database\"}",
-      "GAME_PORT": "{gameserver.game_port}",
-      "BRANCH": "{config_parameter id=\"branch\"}",
-      "SERVER_NAME": "{gameserver.list_name}",
-      "MAX_PLAYERS": "{gameserver.slot_limit}",
-      "AG_AUTH_TOKEN": "{config_parameter id=\"auth_token\"}",
-      "EXTRA_ARGS": "-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={machine.ip} -log {config_parameter id=\"additional_launch_params\"}"
-    },
-    "mounts": {
-      "{container.home_root}/serverfiles": "c:/serverfiles"
-    }
-  },
-  "dir": {
-    "Serverfiles": {
-      "path": "\\serverfiles",
-      "create": false,
-      "type": "normal"
-    },
-    "Logs": {
-      "path": "\\serverfiles\\PathOfTitans\\Saved\\Logs",
-      "create": true,
-      "type": "logs"
-    }
-  },
-  "game": {
-    "server": {
-      "wipe": [
-        "\\serverfiles\\PathOfTitans\\Saved\\DatabaseCache"
-      ],
-      "backup": {
-        "Saved": "\\serverfiles\\PathOfTitans\\Saved"
-      },
-      "command_control": {
-        "type": "rcon_1",
-        "commands": {
-          "save": "Save",
-          "broadcast": "Announce {message}",
-          "quit": "ProfileServer Stop"
-        }
-      },
-      "monitoring": {
-        "type": "query",
-        "recovery_mode": true
-      }
-    },
-    "type": "custom",
-    "config": {
-      "files": {
-        "Game.ini": {
-          "path": "\\serverfiles\\PathOfTitans\\Saved\\Config\\WindowsServer\\Game.ini",
-          "info": "Primary Configuration File",
-          "disable_edit": "0",
-          "content": "; Path of Titans - Game.ini default for a GameServerApp blueprint\r\n; Path in GSA config template, Windows:\r\n; \\serverfiles\\PathOfTitans\\Saved\\Config\\WindowsServer\\Game.ini\r\n;\r\n; GSA variables used:\r\n; {gameserver.list_name}        - server browser name\r\n; {gameserver.slot_limit}       - max player slots\r\n; {gameserver.query_port}       - Source Query port\r\n; {gameserver.rcon_port}        - Source/Valve RCON port\r\n; {gameserver.rcon_password}    - GSA admin password / RCON password\r\n; {config_parameter id=\"map\"}   - Path of Titans internal map name: Panjura, Island for Gondwa, Riparia, or an exact modded map name\r\n;\r\n; Notes:\r\n; - Stop the server before editing.\r\n; - Each option must be on its own line.\r\n; - Lines starting with ; are examples/optional values.\r\n; - GSA registers \\serverfiles\\PathOfTitans\\Saved\\Logs as a separate Logs directory for native Path of Titans log files.\r\n\r\n[/Script/PathOfTitans.IGameSession]\r\nServerName={gameserver.list_name}\r\nServerMap={config_parameter id=\"map\"}\r\nMaxPlayers={gameserver.slot_limit}\r\nServerPassword={config_parameter id=\"server_password\"}\r\nReservedSlots={config_parameter id=\"reserved_slots\"}\r\nbServerPaidUsersOnly={config_parameter id=\"paid_users_only\"}\r\nbServerAllowChat={config_parameter id=\"allow_chat\"}\r\nbServerGlobalChat={config_parameter id=\"allow_global_chat\"}\r\nbServerNameTags={config_parameter id=\"show_name_tags\"}\r\nbServerFish={config_parameter id=\"enable_fish\"}\r\nbServerWaterQualitySystem={config_parameter id=\"enable_water_quality_system\"}\r\nbOverrideWaterRegeneration={config_parameter id=\"override_water_regeneration\"}\r\nbEnableWaterRegeneration={config_parameter id=\"enable_water_regeneration\"}\r\nWaterRegenerationRateMultiplierUpdate={config_parameter id=\"water_regen_update_seconds\"}\r\nWaterRegenerationRate={config_parameter id=\"water_regen_rate_seconds\"}\r\nWaterRegenerationValue={config_parameter id=\"water_regen_value\"}\r\nWaterRainRegenerationIncrement={config_parameter id=\"water_rain_regen_increment\"}\r\nbServerWaystoneCooldownRemoval={config_parameter id=\"waystone_cooldown_removal\"}\r\nOverrideWaystoneCooldown={config_parameter id=\"waystone_cooldown_override\"}\r\nbOverrideMaxCompleteQuestsInLocation={config_parameter id=\"override_max_complete_quests\"}\r\nMaxCompleteQuestsInLocation={config_parameter id=\"max_complete_quests_in_location\"}\r\nWeatherLengthVariation=(X={config_parameter id=\"weather_length_min\"},Y={config_parameter id=\"weather_length_max\"})\r\nWeatherBlendVariation=(X={config_parameter id=\"weather_blend_min\"},Y={config_parameter id=\"weather_blend_max\"})\r\nbServerFallDamage={config_parameter id=\"fall_damage\"}\r\nbPermaDeath={config_parameter id=\"perma_death\"}\r\nbDeathInfo={config_parameter id=\"death_info\"}\r\nServerDiscord={config_parameter id=\"server_discord_invite_code\"}\r\nPlayerCommandEscapeChars={config_parameter id=\"player_command_escape_chars\"}\r\nbServerAutoRestart={config_parameter id=\"server_auto_restart\"}\r\n; Routine restarts should be scheduled in GSA, not in Path of Titans Game.ini.\r\nServerDeadBodyTime={config_parameter id=\"dead_body_time\"}\r\nServerRespawnTime={config_parameter id=\"respawn_time\"}\r\nServerFootprintLifetime={config_parameter id=\"footprint_lifetime\"}\r\nbServerAllowMap={config_parameter id=\"allow_map\"}\r\nbServerAllowMinimap={config_parameter id=\"allow_minimap\"}\r\nbServerAllow3DMapMarkers={config_parameter id=\"allow_three_d_map_markers\"}\r\n;AllowedCharacters={config_parameter id=\"allowed_character_a\"}\r\n;DisallowedCharacters={config_parameter id=\"disallowed_character_a\"}\r\nbServerHomeCaves={config_parameter id=\"home_caves\"}\r\nbServerWellRestedBuff={config_parameter id=\"well_rested_buff\"}\r\nbServerEditAbilitiesInHomeCaves={config_parameter id=\"edit_abilities_in_home_caves\"}\r\nbServerEditAbilitiesWhileSleeping={config_parameter id=\"edit_abilities_while_sleeping\"}\r\nbServerHatchlingCaves={config_parameter id=\"hatchling_caves\"}\r\nbServerHungerThirstInCaves={config_parameter id=\"hunger_thirst_in_caves\"}\r\nbServerGrowth={config_parameter id=\"server_growth\"}\r\nMinGrowthAfterDeath={config_parameter id=\"min_growth_after_death\"}\r\nGlobalPassiveGrowthPerMinute={config_parameter id=\"passive_growth_per_minute\"}\r\nChangeSubspeciesGrowthPenaltyPercent={config_parameter id=\"change_subspecies_growth_penalty_percent\"}\r\nbServerAllowChangeSubspecies={config_parameter id=\"allow_change_subspecies\"}\r\nbServerCombatTimerAppliesToGroup={config_parameter id=\"combat_timer_applies_to_group\"}\r\nQuestGrowthMultiplier={config_parameter id=\"quest_growth_multiplier\"}\r\nQuestMarksMultiplier={config_parameter id=\"quest_marks_multiplier\"}\r\nbOverrideLocalQuestCooldown={config_parameter id=\"override_local_quest_cooldown\"}\r\nLocalQuestCooldown={config_parameter id=\"local_quest_cooldown\"}\r\nbOverrideLocationQuestCooldown={config_parameter id=\"override_location_quest_cooldown\"}\r\nLocationQuestCooldown={config_parameter id=\"location_quest_cooldown\"}\r\nbPOIDiscoveryRewards={config_parameter id=\"poi_discovery_rewards\"}\r\nbEnableExploreQuests={config_parameter id=\"enable_explore_quests\"}\r\nbLoseGrowthPastGrowthStages={config_parameter id=\"lose_growth_past_growth_stages\"}\r\nCombatDeathMarksPenaltyPercent={config_parameter id=\"combat_death_marks_penalty_percent\"}\r\nCombatDeathGrowthPenaltyPercent={config_parameter id=\"combat_death_growth_penalty_percent\"}\r\nFallDeathMarksPenaltyPercent={config_parameter id=\"fall_death_marks_penalty_percent\"}\r\nFallDeathGrowthPenaltyPercent={config_parameter id=\"fall_death_growth_penalty_percent\"}\r\nSurvivalDeathMarksPenaltyPercent={config_parameter id=\"survival_death_marks_penalty_percent\"}\r\nSurvivalDeathGrowthPenaltyPercent={config_parameter id=\"survival_death_growth_penalty_percent\"}\r\nAFKDisconnectTime={config_parameter id=\"afk_disconnect_time\"}\r\nMaxClientPingMs={config_parameter id=\"max_client_ping_ms\"}\r\nMaxClientPingDuration={config_parameter id=\"max_client_ping_duration\"}\r\nHatchlingCaveExitGrowth={config_parameter id=\"hatchling_cave_exit_growth\"}\r\nServerLogoutTime={config_parameter id=\"logout_time\"}\r\nbServerAntiRevengeKill={config_parameter id=\"anti_revenge_kill\"}\r\nRevengeKillDistance={config_parameter id=\"revenge_kill_distance\"}\r\nMaxCharactersPerPlayer={config_parameter id=\"max_characters_per_player\"}\r\nMaxCharactersPerSpecies={config_parameter id=\"max_characters_per_species\"}\r\nbServerAllowReplayRecording={config_parameter id=\"allow_replay_recording\"}\r\nbLoseQuestsOnDeath={config_parameter id=\"lose_quests_on_death\"}\r\nSpeedhackDetection={config_parameter id=\"speedhack_detection\"}\r\nSpeedhackThreshold={config_parameter id=\"speedhack_threshold\"}\r\nbServerCritters={config_parameter id=\"enable_critters\"}\r\nbCritterBurrows={config_parameter id=\"enable_critter_burrows\"}\r\nServerMaxCritters={config_parameter id=\"max_critters\"}\r\nServerCritterDensityMultiplier={config_parameter id=\"critter_density_multiplier\"}\r\n;AllowedCritters={config_parameter id=\"allowed_critter_a\"}\r\n;DisallowedCritters={config_parameter id=\"disallowed_critter_a\"}\r\nbServerWaystones={config_parameter id=\"enable_waystones\"}\r\nbServerHomecaveCampingDebuff={config_parameter id=\"homecave_camping_debuff\"}\r\nbOverrideHomecaveCampingDistance={config_parameter id=\"override_homecave_camping_distance\"}\r\nHomecaveCampingDistance={config_parameter id=\"homecave_camping_distance\"}\r\nbOverrideHomecaveCampingDelay={config_parameter id=\"override_homecave_camping_delay\"}\r\nHomecaveCampingDelay={config_parameter id=\"homecave_camping_delay\"}\r\nbTrophyQuests={config_parameter id=\"trophy_quests\"}\r\nbOverrideTrophyQuestCooldown={config_parameter id=\"override_trophy_quest_cooldown\"}\r\nTrophyQuestCooldown={config_parameter id=\"trophy_quest_cooldown\"}\r\nMaxGroupQuests={config_parameter id=\"max_group_quests\"}\r\nbServerAllowAnselMultiplayerPausing={config_parameter id=\"allow_ansel_pause\"}\r\nServerAnselCameraConstraintDistance={config_parameter id=\"ansel_camera_constraint_distance\"}\r\nbServerAllowInGameWaystone={config_parameter id=\"allow_in_game_waystone\"}\r\nbServerLocalWorldQuests={config_parameter id=\"local_world_quests\"}\r\nServerMinTimeBetweenExplorationQuest={config_parameter id=\"min_time_between_exploration_quest\"}\r\nbEnforceWhitelist={config_parameter id=\"enforce_whitelist\"}\r\n;ServerAdmins={config_parameter id=\"server_admin_agid_a\"}\r\n;ServerAdmins={config_parameter id=\"server_admin_agid_b\"}\r\n;CurveOverrides=(CurveName=\"Global.LoginDebuffDuration\",Values=(60))\r\n;CurveOverrides=(CurveName=\"Global.LoginDebuffSpeedReduction\",Values=(0.75))\r\n;CurveOverrides=(CurveName=\"Global.LoginDebuffIncomingDamage\",Values=(2))\r\n;CurveOverrides=(CurveName=\"Global.LoginDebuffAttackDamage\",Values=(0.4))\r\n;CurveOverrides=(CurveName=\"Global.GroupLeaderBuffStaminaRecoveryMultiplier\",Values=(1.1))\r\n;CurveOverrides=(CurveName=\"Global.GroupLeaderBuffSpeedMultiplier\",Values=(1.05))\r\n;CurveOverrides=(CurveName=\"Global.InCombatDuration\",Values=(30))\r\n;CurveOverrides=(CurveName=\"Generic.InCombat.HealthRecovery.Multiplier\",Values=(0.5))\r\n;GroupSlotSizeOverrides=(DinoAssetID=\"Allosaurus\",GroupSize=5)\r\nbServerNesting={config_parameter id=\"server_nesting\"}\r\nbNestingDecorations={config_parameter id=\"nesting_decorations\"}\r\nbServerHatchlingCaveEggs={config_parameter id=\"hatchling_cave_eggs\"}\r\nbServerSameSpeciesAdoptionRestriction={config_parameter id=\"same_species_adoption_restriction\"}\r\nMinNestingGrowth={config_parameter id=\"min_nesting_growth\"}\r\nMaxNestImmunityBuffGrowth=0.25\r\nMaxNestRespawnGrowth=0.5\r\nMaxNestFreeRespawnGrowth=0.25\r\nMinNestRespawnCondition=0.5\r\nMinNestHealthForDecorations=0.5\r\nMinNestBabySlotFoodWater=0.0\r\nMinNestBabySlotResources=0.5\r\nMinNestHealthToEditAbilities=0.75\r\nMaxAdoptionGrowth=0.5\r\nMaxEatFromNestGrowth=0.5\r\nMaxDependentChildGrowth=0.5\r\nNestInactiveDespawnTimeSolo=120\r\nNestInactiveDespawnTimeDependents=120\r\nNestDisrepairDespawnTime=7200\r\nNestLowHealthThreshold=0.2\r\nNestBabySlotGenerationTime=300\r\nNestInvitationExpiryTime=15\r\nNestAcceptedInvitationExpiryTime=300\r\nFamilyBuffRange=5000\r\nNestResourceMultiplier={config_parameter id=\"nest_resource_multiplier\"}\r\nNestResourcelessConstructionSpeed=5.0\r\nbNestsInvulnerable={config_parameter id=\"nests_invulnerable\"}\r\nNestObstructionRadius=500\r\nbSpawnParentNestOnLogin={config_parameter id=\"spawn_parent_nest_on_login\"}\r\nbUseTutorialCustomGrowthMultiplier=false\r\nTutorialCustomGrowthMultiplier=1.0\r\nMinimumNestDistanceFromHomeRock=5000\r\nbServerEditAbilitiesAtNest={config_parameter id=\"edit_abilities_at_nest\"}\r\nMinNestBuffHealthPercent=0.5\r\nbServerShowMapIconPopularLocation=false\r\nServerMapIconPopularLocationPlayerCount=10\r\nServerLogoutAction=0\r\nbDisableGrouping=false\r\n\r\n[/Script/PathOfTitans.IGameMode]\r\nServerStartingTime={config_parameter id=\"server_starting_time\"}\r\nbServerDynamicTimeOfDay={config_parameter id=\"dynamic_time_of_day\"}\r\nbServerRestrictCarnivoreGrouping={config_parameter id=\"restrict_carnivore_grouping\"}\r\nbServerRestrictHerbivoreGrouping={config_parameter id=\"restrict_herbivore_grouping\"}\r\nServerDayLength={config_parameter id=\"server_day_length\"}\r\nServerNightLength={config_parameter id=\"server_night_length\"}\r\nMaxGroupSize={config_parameter id=\"max_group_size\"}\r\nFurthestSpawnInclusionRadius=250000\r\nDefaultCreatorModeSave={config_parameter id=\"default_creator_mode_save\"}\r\nMaxGroupLeaderCommunicationDistance={config_parameter id=\"group_leader_comm_distance\"}\r\n\r\n[SourceQuery]\r\nbEnabled=true\r\nPort={gameserver.query_port}\r\nIP=\"0.0.0.0\"\r\n\r\n[SourceRCON]\r\nbEnabled=true\r\nbLogging={config_parameter id=\"rcon_log_commands\"}\r\n; RCON logging is expected to write through the server log system under Saved/Logs.\r\n; GSA exposes that folder as: \\serverfiles\\PathOfTitans\\Saved\\Logs\r\n; No documented SourceRCON-specific filepath key was found, so custom LogFilePath keys are intentionally not enabled.\r\nPassword=\"{gameserver.rcon_password}\"\r\nPort={gameserver.rcon_port}\r\nIP=\"0.0.0.0\"\r\nMaxFailedAttempts={config_parameter id=\"rcon_max_failed_attempts\"}\r\nTimeout={config_parameter id=\"rcon_timeout\"}\r\nPageTimeout={config_parameter id=\"rcon_page_timeout\"}\r\nMaxConnectionsPerIP={config_parameter id=\"rcon_max_connections_per_ip\"}\r\n;IPAllowList={config_parameter id=\"rcon_ip_allowlist_a\"}\r\n;IPAllowList={config_parameter id=\"rcon_ip_allowlist_b\"}\r\n\r\n[ServerWebhooks]\r\n; Webhook URLs are optional. Keep them private, especially Discord webhook URLs.\r\nbEnabled={config_parameter id=\"webhooks_enabled\"}\r\nFormat=\"{config_parameter id=\"webhook_format\"}\"\r\nPlayerChat=\"{config_parameter id=\"player_chat_webhook\"}\"\r\nPlayerCommand=\"{config_parameter id=\"player_command_webhook\"}\"\r\nPlayerReport=\"{config_parameter id=\"player_report_webhook\"}\"\r\nPlayerLogin=\"{config_parameter id=\"player_login_webhook\"}\"\r\nPlayerLogout=\"{config_parameter id=\"player_logout_webhook\"}\"\r\nPlayerKilled=\"{config_parameter id=\"player_killed_webhook\"}\"\r\nAdminCommand=\"{config_parameter id=\"admin_command_webhook\"}\"\r\nServerError=\"{config_parameter id=\"server_error_webhook\"}\"\r\nSecurityAlert=\"{config_parameter id=\"security_alert_webhook\"}\"\r\n\r\n[BattlEye]\r\nbEnabled=true\r\n"
-        },
-        "MOTD.txt": {
-          "path": "\\serverfiles\\PathOfTitans\\Saved\\MOTD.txt",
-          "info": "Message of the Day. Path of Titans does not support Markdown or HTML here; use one Alderon formatting tag per line and close formatted text with </>.",
-          "disable_edit": "0",
-          "content": "<blue>Join us every Friday and Saturday for the Sarco dance-off competition.</>\r\n<small>Winners get 100 marks and a Dance Master role on our Discord server!</>\r\n\r\nThanks and have fun!"
-        },
-        "Rules.txt": {
-          "path": "\\serverfiles\\PathOfTitans\\Saved\\Rules.txt",
-          "info": "Rules displayed on join. Path of Titans does not support Markdown or HTML here; use one Alderon formatting tag per line and close formatted text with </>.",
-          "disable_edit": "0",
-          "content": "<title>{gameserver.list_name} Server Rules</>\r\n<red>1 - Please only attack Camptos.</>\r\nCamptosauruses are very evil!\r\n\r\n<orange>2 - Corpse Cove is closed due to dirty water.</>\r\n\r\nThese are the only rules on this server!\r\n<large>Thanks, and have fun!</>"
-        },
-        "Commands.ini": {
-          "path": "\\serverfiles\\PathOfTitans\\Saved\\Commands.ini",
-          "info": "You must edit the Commands.ini to modify player roles",
-          "disable_edit": "0",
-          "content": "[Role:Teleporter]\r\n+Permission=teleport\r\n+Permission=teleportall\r\nChatColor=(R=0,G=255,B=0,A=255)\r\nOverrideAdminChatColor=True\r\nReservedSlot=True\r\n\r\n[PlayerRoles]\r\n123-456-789=Teleporter"
-        },
-        "GameUserSettings.ini": {
-          "path": "\\serverfiles\\PathOfTitans\\Saved\\Config\\WindowsServer\\GameUserSettings.ini",
-          "info": "This is almost exclusively used for your Mod List and some hardware-level settings.",
-          "disable_edit": "0",
-          "content": "[PathOfTitans.Mods]\r\n\r\n; Add one EnabledMods line per mod when needed:\r\n; EnabledMods=\"UGC_M_EXAMPLEMODID_SK\""
-        },
-        "whitelist.txt": {
-          "path": "\\serverfiles\\PathOfTitans\\Saved\\whitelist.txt",
-          "info": "Path of Titans whitelist. Add one Alderon ID per line when whitelist enforcement is enabled.",
-          "disable_edit": "0",
-          "content": ""
-        }
-      },
-      "parameters": {
-        "auth_token": {"name":"Alderon Auth Token","info":"Required. Alderon Games auth token used by AlderonGamesCmd to install and update Path of Titans server files.","section":"Server Setup","type":"text","content":""},
-        "database": {"name":"Database Mode","info":"Passed to Captain Gecko pot-server as DATABASE. Use Remote for most community servers; Local is only for local database setups.","section":"Server Setup","type":"array","dropdown":"{\"Remote\":\"Remote\",\"Local\":\"Local\"}"},
-        "branch": {"name":"Branch","info":"Path of Titans branch key. Usually production.","section":"Server Setup","type":"text","content":"production"},
-        "additional_launch_params": {"name":"Additional Launch Arguments","info":"Optional literal Path of Titans launch arguments only. Do not add QueryPort, QueryIP, RconPort, RconIP, MULTIHOME, ServerListIP, or -log here; the blueprint already supplies those with real GSA variables.","section":"Server Setup","type":"text","content":""},
-        "map": {"name":"Map","info":"Path of Titans internal map name. Use Island for Gondwa, Panjura for Panjura, Riparia for Riparia, or the exact modded map name.","section":"Game","type":"text","content":"Island"},
-        "server_password": {"name":"Server Password","info":"Optional join password. Leave blank for public access.","section":"Access","type":"text","content":""},
-        "reserved_slots": {"name":"Reserved/Admin Slots","info":"Number of slots reserved exclusively for admins or reserved-slot roles.","section":"Access","type":"text","content":"0"},
-        "server_discord_invite_code": {"name":"Discord Invite Code","info":"Create a permanent Discord invite and paste only the generated code, not the full invite URL.","section":"Game","type":"text","content":""},
-        "server_admin_agid_a": {"name":"Server Admin Alderon ID A","info":"Optional ServerAdmins example slot. Uncomment the ServerAdmins line in Game.ini after filling this.","section":"Access","type":"text","content":""},
-        "server_admin_agid_b": {"name":"Server Admin Alderon ID B","info":"Optional second ServerAdmins example slot. Uncomment the ServerAdmins line in Game.ini after filling this.","section":"Access","type":"text","content":""},
-        "paid_users_only": {"name":"Paid Users Only","info":"Restrict the server to paid users only.","section":"Access","type":"boolean","content":"0"},
-        "enforce_whitelist": {"name":"Enforce Whitelist","info":"Require players to be listed in whitelist.txt before joining.","section":"Access","type":"boolean","content":"0"},
-        "allow_chat": {"name":"Allow Chat","info":"Enable or disable text chat for the entire server.","section":"Access","type":"boolean","content":"1"},
-        "allow_global_chat": {"name":"Global Chat","info":"Enable or disable the global chat channel.","section":"Access","type":"boolean","content":"1"},
-        "show_name_tags": {"name":"Player Name Tags","info":"Allow all players to see player name tags. Defaults off for a more survival-focused server.","section":"Access","type":"boolean","content":"0"},
-        "allow_map": {"name":"Full Map","info":"Enable or disable the full map.","section":"Access","type":"boolean","content":"1"},
-        "allow_minimap": {"name":"Minimap","info":"Enable or disable the minimap.","section":"Access","type":"boolean","content":"1"},
-        "allow_three_d_map_markers": {"name":"3D Map Markers","info":"Enable or disable markers on the full map and floating quest markers.","section":"Access","type":"boolean","content":"1"},
-        "server_auto_restart": {"name":"Path of Titans Auto Restart","info":"Path of Titans internal auto-restart toggle. Leave disabled when GSA handles scheduled restarts and container recovery.","section":"Game","type":"boolean","content":"0"},
-        "server_starting_time": {"name":"World Time On Startup","info":"Time of day after restart, scaled 0-2400. Example: 1350.","section":"Game","type":"text","content":"1350"},
-        "dynamic_time_of_day": {"name":"Dynamic Time of Day","info":"1 enables animated day/night cycle. 0 uses fixed ServerStartingTime.","section":"Game","type":"boolean","content":"1"},
-        "server_day_length": {"name":"Day Length Minutes","info":"Length in minutes of the daylight cycle.","section":"Game","type":"text","content":"60"},
-        "server_night_length": {"name":"Night Length Minutes","info":"Length in minutes of the night cycle.","section":"Game","type":"text","content":"30"},
-        "weather_length_min": {"name":"Weather Length Min","info":"Minimum minutes a weather type can stay active.","section":"Game","type":"text","content":"10"},
-        "weather_length_max": {"name":"Weather Length Max","info":"Maximum minutes a weather type can stay active.","section":"Game","type":"text","content":"20"},
-        "weather_blend_min": {"name":"Weather Blend Min","info":"Minimum minutes for weather transition blending.","section":"Game","type":"text","content":"1"},
-        "weather_blend_max": {"name":"Weather Blend Max","info":"Maximum minutes for weather transition blending.","section":"Game","type":"text","content":"2"},
-        "max_group_size": {"name":"Maximum Group Size","info":"Maximum number of group slots allowed for player groups.","section":"General Gameplay","type":"text","content":"10"},
-        "restrict_carnivore_grouping": {"name":"Restrict Carnivore Grouping","info":"Prevent mixed carnivore grouping when enabled.","section":"General Gameplay","type":"boolean","content":"0"},
-        "restrict_herbivore_grouping": {"name":"Restrict Herbivore Grouping","info":"Prevent mixed herbivore grouping when enabled.","section":"General Gameplay","type":"boolean","content":"0"},
-        "combat_timer_applies_to_group": {"name":"Combat Timer Applies To Group","info":"When enabled, combat timers apply to the whole group.","section":"General Gameplay","type":"boolean","content":"1"},
-        "group_leader_comm_distance": {"name":"Group Leader Communication Distance","info":"Maximum group leader communication distance.","section":"General Gameplay","type":"text","content":"50000"},
-        "max_group_quests": {"name":"Maximum Group Quests","info":"Maximum concurrent group quests.","section":"General Gameplay","type":"text","content":"2"},
-        "server_growth": {"name":"Enable Growth","info":"Enable dinosaur growth. Disabling spawns characters as adults.","section":"Growth and Death","type":"boolean","content":"1"},
-        "passive_growth_per_minute": {"name":"Passive Growth Per Minute","info":"Additional passive growth per minute. 0 disables passive growth.","section":"Growth and Death","type":"text","content":"0"},
-        "quest_growth_multiplier": {"name":"Quest Growth Multiplier","info":"Multiplier for growth earned from quests.","section":"Growth and Death","type":"text","content":"1"},
-        "quest_marks_multiplier": {"name":"Quest Marks Multiplier","info":"Multiplier for marks earned from quests.","section":"Growth and Death","type":"text","content":"1.0"},
-        "override_local_quest_cooldown": {"name":"Override Local Quest Cooldown","info":"Enable a custom cooldown for local quests.","section":"Growth and Death","type":"boolean","content":"0"},
-        "local_quest_cooldown": {"name":"Local Quest Cooldown Seconds","info":"Custom local quest cooldown in seconds. Only applies when the override is enabled.","section":"Growth and Death","type":"text","content":"0"},
-        "override_location_quest_cooldown": {"name":"Override Location Quest Cooldown","info":"Enable a custom cooldown for location quests.","section":"Growth and Death","type":"boolean","content":"0"},
-        "location_quest_cooldown": {"name":"Location Quest Cooldown Seconds","info":"Custom location quest cooldown in seconds. Only applies when the override is enabled.","section":"Growth and Death","type":"text","content":"0"},
-        "min_growth_after_death": {"name":"Minimum Growth After Death","info":"Minimum growth a player can be rolled back to after death.","section":"Growth and Death","type":"text","content":"0.5"},
-        "lose_growth_past_growth_stages": {"name":"Lose Growth Past Growth Stages","info":"Allows death penalties to roll growth back past stage thresholds.","section":"Growth and Death","type":"boolean","content":"1"},
-        "combat_death_marks_penalty_percent": {"name":"Combat Death Marks Penalty %","info":"Marks penalty percentage for combat deaths.","section":"Growth and Death","type":"text","content":"25"},
-        "combat_death_growth_penalty_percent": {"name":"Combat Death Growth Penalty %","info":"Growth penalty percentage for combat deaths.","section":"Growth and Death","type":"text","content":"10"},
-        "fall_death_marks_penalty_percent": {"name":"Fall Death Marks Penalty %","info":"Marks penalty percentage for fall deaths.","section":"Growth and Death","type":"text","content":"5"},
-        "fall_death_growth_penalty_percent": {"name":"Fall Death Growth Penalty %","info":"Growth penalty percentage for fall deaths.","section":"Growth and Death","type":"text","content":"2"},
-        "survival_death_marks_penalty_percent": {"name":"Survival Death Marks Penalty %","info":"Marks penalty percentage for survival deaths.","section":"Growth and Death","type":"text","content":"10"},
-        "survival_death_growth_penalty_percent": {"name":"Survival Death Growth Penalty %","info":"Growth penalty percentage for survival deaths.","section":"Growth and Death","type":"text","content":"5"},
-        "fall_damage": {"name":"Fall Damage","info":"Enable or disable fall damage.","section":"Growth and Death","type":"boolean","content":"1"},
-        "perma_death": {"name":"Permanent Death","info":"Experimental permanent death. Use carefully.","section":"Growth and Death","type":"boolean","content":"0"},
-        "death_info": {"name":"Death Info","info":"Show dead-character info when permanent death is enabled.","section":"Growth and Death","type":"boolean","content":"0"},
-        "lose_quests_on_death": {"name":"Lose Quests On Death","info":"Remove active quests on death.","section":"Growth and Death","type":"boolean","content":"1"},
-        "allow_change_subspecies": {"name":"Allow Change Subspecies","info":"Allow players to change subspecies.","section":"Growth and Death","type":"boolean","content":"1"},
-        "change_subspecies_growth_penalty_percent": {"name":"Change Subspecies Growth Penalty %","info":"Growth penalty percentage for changing subspecies.","section":"Growth and Death","type":"text","content":"25"},
-        "enable_fish": {"name":"Fish","info":"Enable or disable fish spawning.","section":"World and Survival","type":"boolean","content":"1"},
-        "enable_water_quality_system": {"name":"Water Quality System","info":"Enable or disable the water quality system.","section":"World and Survival","type":"boolean","content":"1"},
-        "override_water_regeneration": {"name":"Override Water Regeneration","info":"Enable custom water regeneration settings.","section":"World and Survival","type":"boolean","content":"0"},
-        "enable_water_regeneration": {"name":"Enable Water Regeneration","info":"Allow water to naturally regenerate over time.","section":"World and Survival","type":"boolean","content":"1"},
-        "water_regen_update_seconds": {"name":"Water Regen Update Seconds","info":"Water regeneration update interval.","section":"World and Survival","type":"text","content":"180"},
-        "water_regen_rate_seconds": {"name":"Water Regen Rate Seconds","info":"Seconds between water regeneration applications.","section":"World and Survival","type":"text","content":"60"},
-        "water_regen_value": {"name":"Water Regen Value","info":"Amount of water regenerated each cycle.","section":"World and Survival","type":"text","content":"10"},
-        "water_rain_regen_increment": {"name":"Water Rain Regen Increment","info":"Rain regeneration multiplier/increment.","section":"World and Survival","type":"text","content":"20.0"},
-        "dead_body_time": {"name":"Dead Body Time","info":"Body cleanup timer. 0 lets bodies persist until fully decayed.","section":"World and Survival","type":"text","content":"0"},
-        "respawn_time": {"name":"Respawn Time Minutes","info":"Minutes a player must be alive before /respawn can be used.","section":"World and Survival","type":"text","content":"45"},
-        "footprint_lifetime": {"name":"Footprint Lifetime Seconds","info":"Maximum footprint lifetime in seconds. 0 disables footprints.","section":"World and Survival","type":"text","content":"60"},
-        "afk_disconnect_time": {"name":"AFK Disconnect Seconds","info":"Seconds before AFK players are disconnected. 0 disables.","section":"World and Survival","type":"text","content":"600"},
-        "max_client_ping_ms": {"name":"Max Client Ping Ms","info":"Maximum client ping. 0 disables ping enforcement.","section":"World and Survival","type":"text","content":"0"},
-        "max_client_ping_duration": {"name":"Max Client Ping Duration","info":"Duration a player can exceed max ping before action. 0 disables.","section":"World and Survival","type":"text","content":"0"},
-        "logout_time": {"name":"Logout Timer Seconds","info":"Logout timer in seconds.","section":"World and Survival","type":"text","content":"60"},
-        "anti_revenge_kill": {"name":"Anti Revenge Kill","info":"Enable anti-revenge-kill behavior.","section":"World and Survival","type":"boolean","content":"1"},
-        "revenge_kill_distance": {"name":"Revenge Kill Distance","info":"Distance used by anti-revenge-kill behavior.","section":"World and Survival","type":"text","content":"100000"},
-        "max_characters_per_player": {"name":"Max Characters Per Player","info":"Maximum characters each player may have.","section":"World and Survival","type":"text","content":"30"},
-        "max_characters_per_species": {"name":"Max Characters Per Species","info":"Maximum characters per species per player.","section":"World and Survival","type":"text","content":"1"},
-        "allow_replay_recording": {"name":"Replay Recording","info":"Enable multiplayer replay recording.","section":"World and Survival","type":"boolean","content":"0"},
-        "speedhack_detection": {"name":"Speedhack Detection","info":"Speedhack detection mode. Leave default unless troubleshooting.","section":"World and Survival","type":"text","content":"1"},
-        "speedhack_threshold": {"name":"Speedhack Threshold","info":"Speedhack detection threshold. Leave default unless troubleshooting.","section":"World and Survival","type":"text","content":"10"},
-        "home_caves": {"name":"Home Caves","info":"Enable or disable home caves.","section":"Caves and Nesting","type":"boolean","content":"1"},
-        "well_rested_buff": {"name":"Well Rested Buff","info":"Enable or disable the home-cave well rested buff.","section":"Caves and Nesting","type":"boolean","content":"1"},
-        "edit_abilities_in_home_caves": {"name":"Edit Abilities In Home Caves","info":"Require ability edits to happen in home caves when enabled.","section":"Caves and Nesting","type":"boolean","content":"1"},
-        "edit_abilities_while_sleeping": {"name":"Edit Abilities While Sleeping","info":"Require sleeping for ability edits when enabled.","section":"Caves and Nesting","type":"boolean","content":"0"},
-        "hatchling_caves": {"name":"Hatchling Caves","info":"Enable hatchling/tutorial caves.","section":"Caves and Nesting","type":"boolean","content":"1"},
-        "hatchling_cave_exit_growth": {"name":"Hatchling Cave Exit Growth","info":"Growth when exiting hatchling cave.","section":"Caves and Nesting","type":"text","content":"0.25"},
-        "hunger_thirst_in_caves": {"name":"Hunger/Thirst In Caves","info":"Allow hunger and thirst drain inside caves.","section":"Caves and Nesting","type":"boolean","content":"0"},
-        "homecave_camping_debuff": {"name":"Homecave Camping Debuff","info":"Enable homecave camping debuff.","section":"Caves and Nesting","type":"boolean","content":"1"},
-        "override_homecave_camping_distance": {"name":"Override Homecave Camping Distance","info":"Enable custom homecave camping distance.","section":"Caves and Nesting","type":"boolean","content":"0"},
-        "homecave_camping_distance": {"name":"Homecave Camping Distance","info":"Distance for homecave camping detection.","section":"Caves and Nesting","type":"text","content":"20000"},
-        "override_homecave_camping_delay": {"name":"Override Homecave Camping Delay","info":"Enable custom homecave camping delay.","section":"Caves and Nesting","type":"boolean","content":"0"},
-        "homecave_camping_delay": {"name":"Homecave Camping Delay Seconds","info":"Delay for homecave camping detection.","section":"Caves and Nesting","type":"text","content":"180"},
-        "server_nesting": {"name":"Nesting","info":"Enable nesting.","section":"Caves and Nesting","type":"boolean","content":"1"},
-        "nesting_decorations": {"name":"Nest Decorations","info":"Enable nest decorations.","section":"Caves and Nesting","type":"boolean","content":"1"},
-        "hatchling_cave_eggs": {"name":"Hatchling Cave Eggs","info":"Enable hatchling cave eggs.","section":"Caves and Nesting","type":"boolean","content":"1"},
-        "same_species_adoption_restriction": {"name":"Same Species Adoption Restriction","info":"Restrict adoption to same species when enabled.","section":"Caves and Nesting","type":"boolean","content":"0"},
-        "min_nesting_growth": {"name":"Minimum Nesting Growth","info":"Minimum growth required for nesting.","section":"Caves and Nesting","type":"text","content":"0.75"},
-        "nest_resource_multiplier": {"name":"Nest Resource Multiplier","info":"Nest resource multiplier.","section":"Caves and Nesting","type":"text","content":"1.0"},
-        "nests_invulnerable": {"name":"Nests Invulnerable","info":"Make nests invulnerable when enabled.","section":"Caves and Nesting","type":"boolean","content":"0"},
-        "spawn_parent_nest_on_login": {"name":"Spawn Parent Nest On Login","info":"Spawn parent nest on login when enabled.","section":"Caves and Nesting","type":"boolean","content":"0"},
-        "edit_abilities_at_nest": {"name":"Edit Abilities At Nest","info":"Allow ability edits at nests.","section":"Caves and Nesting","type":"boolean","content":"1"},
-        "enable_critters": {"name":"Critters","info":"Enable critters.","section":"World Systems","type":"boolean","content":"1"},
-        "enable_critter_burrows": {"name":"Critter Burrows","info":"Enable critter burrows.","section":"World Systems","type":"boolean","content":"1"},
-        "max_critters": {"name":"Max Critters","info":"Maximum critters on the server.","section":"World Systems","type":"text","content":"200"},
-        "critter_density_multiplier": {"name":"Critter Density Multiplier","info":"Critter density multiplier.","section":"World Systems","type":"text","content":"0.75"},
-        "enable_waystones": {"name":"Waystones","info":"Enable waystones.","section":"World Systems","type":"boolean","content":"1"},
-        "waystone_cooldown_removal": {"name":"Waystone Cooldown Removal","info":"Allow marks to remove waystone cooldowns.","section":"World Systems","type":"boolean","content":"1"},
-        "waystone_cooldown_override": {"name":"Waystone Cooldown Override","info":"Override waystone cooldown in seconds. -1 uses default.","section":"World Systems","type":"text","content":"-1"},
-        "allow_in_game_waystone": {"name":"In-Game Waystone","info":"Allow in-game waystone use.","section":"World Systems","type":"boolean","content":"1"},
-        "trophy_quests": {"name":"Trophy Quests","info":"Enable trophy quests.","section":"World Systems","type":"boolean","content":"1"},
-        "override_trophy_quest_cooldown": {"name":"Override Trophy Quest Cooldown","info":"Enable custom trophy quest cooldown.","section":"World Systems","type":"boolean","content":"0"},
-        "trophy_quest_cooldown": {"name":"Trophy Quest Cooldown Seconds","info":"Cooldown for trophy quests.","section":"World Systems","type":"text","content":"1800"},
-        "local_world_quests": {"name":"Local World Quests","info":"Enable local world quests.","section":"World Systems","type":"boolean","content":"1"},
-        "min_time_between_exploration_quest": {"name":"Min Time Between Exploration Quest","info":"Minimum time between exploration quests.","section":"World Systems","type":"text","content":"30"},
-        "override_max_complete_quests": {"name":"Override Max Complete Quests In Location","info":"Enable custom MaxCompleteQuestsInLocation.","section":"World Systems","type":"boolean","content":"0"},
-        "max_complete_quests_in_location": {"name":"Max Complete Quests In Location","info":"Quests required within a POI before it is completed.","section":"World Systems","type":"text","content":"3"},
-        "poi_discovery_rewards": {"name":"POI Discovery Rewards","info":"Enable POI discovery rewards.","section":"World Systems","type":"boolean","content":"1"},
-        "enable_explore_quests": {"name":"Explore Quests","info":"Enable exploration quests.","section":"World Systems","type":"boolean","content":"1"},
-        "allow_ansel_pause": {"name":"Ansel Multiplayer Pausing","info":"Allow Ansel multiplayer pausing.","section":"World Systems","type":"boolean","content":"0"},
-        "ansel_camera_constraint_distance": {"name":"Ansel Camera Constraint Distance","info":"Ansel camera constraint distance.","section":"World Systems","type":"text","content":"500"},
-        "rcon_log_commands": {"name":"Log RCON Commands","info":"Enable RCON command logging in the server log.","section":"Remote Access","type":"boolean","content":"1"},
-        "rcon_max_failed_attempts": {"name":"Max Failed Attempts","info":"Failed login attempts before an IP is banned by SourceRCON.","section":"Remote Access","type":"text","content":"5"},
-        "rcon_timeout": {"name":"RCON Timeout Seconds","info":"Seconds before idle RCON connection is closed.","section":"Remote Access","type":"text","content":"60"},
-        "rcon_page_timeout": {"name":"RCON Page Timeout Seconds","info":"Seconds before paged RCON responses are removed.","section":"Remote Access","type":"text","content":"5"},
-        "rcon_max_connections_per_ip": {"name":"Max RCON Connections Per IP","info":"Maximum simultaneous RCON connections per IP.","section":"Remote Access","type":"text","content":"3"},
-        "rcon_ip_allowlist_a": {"name":"RCON IP Allowlist A","info":"Optional SourceRCON IPAllowList entry. Leave blank unless restricting RCON access.","section":"Remote Access","type":"text","content":""},
-        "rcon_ip_allowlist_b": {"name":"RCON IP Allowlist B","info":"Optional second SourceRCON IPAllowList entry. Leave blank unless restricting RCON access.","section":"Remote Access","type":"text","content":""},
-        "allowed_character_a": {"name":"Allowed Character A","info":"Optional AllowedCharacters line value. Leave blank unless using character allowlists.","section":"Advanced","type":"text","content":""},
-        "disallowed_character_a": {"name":"Disallowed Character A","info":"Optional DisallowedCharacters line value. Leave blank unless using character blocklists.","section":"Advanced","type":"text","content":""},
-        "allowed_critter_a": {"name":"Allowed Critter A","info":"Optional AllowedCritters line value. Leave blank unless using critter allowlists.","section":"Advanced","type":"text","content":""},
-        "disallowed_critter_a": {"name":"Disallowed Critter A","info":"Optional DisallowedCritters line value. Leave blank unless using critter blocklists.","section":"Advanced","type":"text","content":""},
-        "default_creator_mode_save": {"name":"Default Creator Mode Save","info":"Name of the creator mode save file to load at startup. Leave blank if unused.","section":"Advanced","type":"text","content":""},
-        "webhooks_enabled": {"name":"Enable Webhooks","info":"Master toggle for Path of Titans webhooks. Enable this only after adding at least one webhook URL below.","section":"Chat and Webhooks","type":"boolean","content":"0"},
-        "webhook_format": {"name":"Webhook Format","info":"Discord formats messages for direct posting to a Discord channel. General sends structured payloads for your own endpoint.","section":"Chat and Webhooks","type":"array","dropdown":"{\"Discord\":\"Discord\",\"General\":\"General\"}"},
-        "player_chat_webhook": {"name":"Player Chat Webhook URL","info":"Discord or endpoint URL that receives in-game chat. Keep this URL private; anyone with it can post to its channel.","section":"Chat and Webhooks","type":"text","content":""},
-        "player_command_webhook": {"name":"Player Command Webhook URL","info":"Optional endpoint for messages beginning with the configured command escape character, such as !.","section":"Chat and Webhooks","type":"text","content":""},
-        "player_command_escape_chars": {"name":"Player Command Escape Characters","info":"Characters that route a chat message to PlayerCommand instead of normal chat. Default ! is retained.","section":"Chat and Webhooks","type":"text","content":"!"},
-        "player_report_webhook": {"name":"Player Report Webhook URL","info":"Optional endpoint for in-game player reports.","section":"Chat and Webhooks","type":"text","content":""},
-        "player_login_webhook": {"name":"Player Login Webhook URL","info":"Optional endpoint for character-selection logins.","section":"Chat and Webhooks","type":"text","content":""},
-        "player_logout_webhook": {"name":"Player Logout Webhook URL","info":"Optional endpoint for full disconnects.","section":"Chat and Webhooks","type":"text","content":""},
-        "player_killed_webhook": {"name":"Player Killed Webhook URL","info":"Optional endpoint for player death events.","section":"Chat and Webhooks","type":"text","content":""},
-        "admin_command_webhook": {"name":"Admin Command Webhook URL","info":"Optional endpoint for admin command events.","section":"Chat and Webhooks","type":"text","content":""},
-        "server_error_webhook": {"name":"Server Error Webhook URL","info":"Optional endpoint for server error events.","section":"Chat and Webhooks","type":"text","content":""},
-        "security_alert_webhook": {"name":"Security Alert Webhook URL","info":"Optional endpoint for security-alert events.","section":"Chat and Webhooks","type":"text","content":""}
-      }
-    }
-  }
+    "_version":  3,
+    "type":  "custom",
+    "docker":  {
+                   "ports":  {
+                                 "query":  {
+                                               "port":  "27015",
+                                               "multiplier":  "1"
+                                           },
+                                 "game":  {
+                                              "port":  "7777",
+                                              "multiplier":  "2"
+                                          },
+                                 "raw":  {
+                                             "port":  "7778",
+                                             "multiplier":  "2"
+                                         },
+                                 "rcon":  {
+                                              "port":  "37015",
+                                              "multiplier":  "1"
+                                          }
+                             },
+                   "image":  {
+                                 "name":  "captaingecko/pot-server",
+                                 "tag":  "windows"
+                             },
+                   "envs":  {
+                                "GUID":  "{helper.uuid}",
+                                "DATABASE":  "{config_parameter id=\"database\"}",
+                                "GAME_PORT":  "{gameserver.game_port}",
+                                "BRANCH":  "{config_parameter id=\"branch\"}",
+                                "SERVER_NAME":  "{gameserver.list_name}",
+                                "MAX_PLAYERS":  "{gameserver.slot_limit}",
+                                "AG_AUTH_TOKEN":  "{config_parameter id=\"auth_token\"}",
+                                "EXTRA_ARGS":  "-log {config_parameter id=\"additional_launch_params\"}"
+                            },
+                   "mounts":  {
+                                  "{container.home_root}/serverfiles":  "c:/serverfiles"
+                              }
+               },
+    "dir":  {
+                "Serverfiles":  {
+                                    "path":  "\\serverfiles",
+                                    "create":  false,
+                                    "type":  "normal"
+                                },
+                "Logs":  {
+                             "path":  "\\serverfiles\\PathOfTitans\\Saved\\Logs",
+                             "create":  true,
+                             "type":  "logs"
+                         }
+            },
+    "game":  {
+                 "server":  {
+                                "wipe":  [
+                                             "\\serverfiles\\PathOfTitans\\Saved\\DatabaseCache"
+                                         ],
+                                "backup":  {
+                                               "Saved":  "\\serverfiles\\PathOfTitans\\Saved"
+                                           },
+                                "command_control":  {
+                                                        "type":  "rcon_1",
+                                                        "commands":  {
+                                                                         "save":  "Save",
+                                                                         "broadcast":  "Announce {message}",
+                                                                         "quit":  "ProfileServer Stop"
+                                                                     }
+                                                    },
+                                "monitoring":  {
+                                                   "type":  "query",
+                                                   "recovery_mode":  true
+                                               }
+                            },
+                 "type":  "custom",
+                 "config":  {
+                                "files":  {
+                                              "Game.ini":  {
+                                                               "path":  "\\serverfiles\\PathOfTitans\\Saved\\Config\\WindowsServer\\Game.ini",
+                                                               "info":  "Primary Configuration File",
+                                                               "disable_edit":  "0",
+                                                               "content":  "; Path of Titans - Game.ini default for a GameServerApp blueprint\r\n; Path in GSA config template, Windows:\r\n; \\serverfiles\\PathOfTitans\\Saved\\Config\\WindowsServer\\Game.ini\r\n;\r\n; GSA variables used:\r\n; {gameserver.list_name}        - server browser name\r\n; {gameserver.slot_limit}       - max player slots\r\n; {gameserver.query_port}       - Source Query port (rendered into Game.ini; not passed through EXTRA_ARGS)\r\n; {gameserver.rcon_port}        - Source/Valve RCON port (rendered into Game.ini; not passed through EXTRA_ARGS)\r\n; {gameserver.rcon_password}    - GSA admin password / RCON password\r\n; {config_parameter id=\"map\"}   - Path of Titans internal map name: Panjura, Island for Gondwa, Riparia, or an exact modded map name\r\n;\r\n; Notes:\r\n; - Stop the server before editing.\r\n; - Each option must be on its own line.\r\n; - Lines starting with ; are examples/optional values.\r\n; - GSA registers \\serverfiles\\PathOfTitans\\Saved\\Logs as a separate Logs directory for native Path of Titans log files.\r\n\r\n[/Script/PathOfTitans.IGameSession]\r\nServerName={gameserver.list_name}\r\nServerMap={config_parameter id=\"map\"}\r\nMaxPlayers={gameserver.slot_limit}\r\nServerPassword={config_parameter id=\"server_password\"}\r\nReservedSlots={config_parameter id=\"reserved_slots\"}\r\nbServerPaidUsersOnly={config_parameter id=\"paid_users_only\"}\r\nbServerAllowChat={config_parameter id=\"allow_chat\"}\r\nbServerGlobalChat={config_parameter id=\"allow_global_chat\"}\r\nbServerNameTags={config_parameter id=\"show_name_tags\"}\r\nbServerFish={config_parameter id=\"enable_fish\"}\r\nbServerWaterQualitySystem={config_parameter id=\"enable_water_quality_system\"}\r\nbOverrideWaterRegeneration={config_parameter id=\"override_water_regeneration\"}\r\nbEnableWaterRegeneration={config_parameter id=\"enable_water_regeneration\"}\r\nWaterRegenerationRateMultiplierUpdate={config_parameter id=\"water_regen_update_seconds\"}\r\nWaterRegenerationRate={config_parameter id=\"water_regen_rate_seconds\"}\r\nWaterRegenerationValue={config_parameter id=\"water_regen_value\"}\r\nWaterRainRegenerationIncrement={config_parameter id=\"water_rain_regen_increment\"}\r\nbServerWaystoneCooldownRemoval={config_parameter id=\"waystone_cooldown_removal\"}\r\nOverrideWaystoneCooldown={config_parameter id=\"waystone_cooldown_override\"}\r\nbOverrideMaxCompleteQuestsInLocation={config_parameter id=\"override_max_complete_quests\"}\r\nMaxCompleteQuestsInLocation={config_parameter id=\"max_complete_quests_in_location\"}\r\nWeatherLengthVariation=(X={config_parameter id=\"weather_length_min\"},Y={config_parameter id=\"weather_length_max\"})\r\nWeatherBlendVariation=(X={config_parameter id=\"weather_blend_min\"},Y={config_parameter id=\"weather_blend_max\"})\r\nbServerFallDamage={config_parameter id=\"fall_damage\"}\r\nbPermaDeath={config_parameter id=\"perma_death\"}\r\nbDeathInfo={config_parameter id=\"death_info\"}\r\nServerDiscord={config_parameter id=\"server_discord_invite_code\"}\r\nPlayerCommandEscapeChars={config_parameter id=\"player_command_escape_chars\"}\r\nbServerAutoRestart={config_parameter id=\"server_auto_restart\"}\r\n; Routine restarts should be scheduled in GSA, not in Path of Titans Game.ini.\r\nServerDeadBodyTime={config_parameter id=\"dead_body_time\"}\r\nServerRespawnTime={config_parameter id=\"respawn_time\"}\r\nServerFootprintLifetime={config_parameter id=\"footprint_lifetime\"}\r\nbServerAllowMap={config_parameter id=\"allow_map\"}\r\nbServerAllowMinimap={config_parameter id=\"allow_minimap\"}\r\nbServerAllow3DMapMarkers={config_parameter id=\"allow_three_d_map_markers\"}\r\n;AllowedCharacters={config_parameter id=\"allowed_character_a\"}\r\n;DisallowedCharacters={config_parameter id=\"disallowed_character_a\"}\r\nbServerHomeCaves={config_parameter id=\"home_caves\"}\r\nbServerWellRestedBuff={config_parameter id=\"well_rested_buff\"}\r\nbServerEditAbilitiesInHomeCaves={config_parameter id=\"edit_abilities_in_home_caves\"}\r\nbServerEditAbilitiesWhileSleeping={config_parameter id=\"edit_abilities_while_sleeping\"}\r\nbServerHatchlingCaves={config_parameter id=\"hatchling_caves\"}\r\nbServerHungerThirstInCaves={config_parameter id=\"hunger_thirst_in_caves\"}\r\nbServerGrowth={config_parameter id=\"server_growth\"}\r\nMinGrowthAfterDeath={config_parameter id=\"min_growth_after_death\"}\r\nGlobalPassiveGrowthPerMinute={config_parameter id=\"passive_growth_per_minute\"}\r\nChangeSubspeciesGrowthPenaltyPercent={config_parameter id=\"change_subspecies_growth_penalty_percent\"}\r\nbServerAllowChangeSubspecies={config_parameter id=\"allow_change_subspecies\"}\r\nbServerCombatTimerAppliesToGroup={config_parameter id=\"combat_timer_applies_to_group\"}\r\nQuestGrowthMultiplier={config_parameter id=\"quest_growth_multiplier\"}\r\nQuestMarksMultiplier={config_parameter id=\"quest_marks_multiplier\"}\r\nbOverrideLocalQuestCooldown={config_parameter id=\"override_local_quest_cooldown\"}\r\nLocalQuestCooldown={config_parameter id=\"local_quest_cooldown\"}\r\nbOverrideLocationQuestCooldown={config_parameter id=\"override_location_quest_cooldown\"}\r\nLocationQuestCooldown={config_parameter id=\"location_quest_cooldown\"}\r\nbPOIDiscoveryRewards={config_parameter id=\"poi_discovery_rewards\"}\r\nbEnableExploreQuests={config_parameter id=\"enable_explore_quests\"}\r\nbLoseGrowthPastGrowthStages={config_parameter id=\"lose_growth_past_growth_stages\"}\r\nCombatDeathMarksPenaltyPercent={config_parameter id=\"combat_death_marks_penalty_percent\"}\r\nCombatDeathGrowthPenaltyPercent={config_parameter id=\"combat_death_growth_penalty_percent\"}\r\nFallDeathMarksPenaltyPercent={config_parameter id=\"fall_death_marks_penalty_percent\"}\r\nFallDeathGrowthPenaltyPercent={config_parameter id=\"fall_death_growth_penalty_percent\"}\r\nSurvivalDeathMarksPenaltyPercent={config_parameter id=\"survival_death_marks_penalty_percent\"}\r\nSurvivalDeathGrowthPenaltyPercent={config_parameter id=\"survival_death_growth_penalty_percent\"}\r\nAFKDisconnectTime={config_parameter id=\"afk_disconnect_time\"}\r\nMaxClientPingMs={config_parameter id=\"max_client_ping_ms\"}\r\nMaxClientPingDuration={config_parameter id=\"max_client_ping_duration\"}\r\nHatchlingCaveExitGrowth={config_parameter id=\"hatchling_cave_exit_growth\"}\r\nServerLogoutTime={config_parameter id=\"logout_time\"}\r\nbServerAntiRevengeKill={config_parameter id=\"anti_revenge_kill\"}\r\nRevengeKillDistance={config_parameter id=\"revenge_kill_distance\"}\r\nMaxCharactersPerPlayer={config_parameter id=\"max_characters_per_player\"}\r\nMaxCharactersPerSpecies={config_parameter id=\"max_characters_per_species\"}\r\nbServerAllowReplayRecording={config_parameter id=\"allow_replay_recording\"}\r\nbLoseQuestsOnDeath={config_parameter id=\"lose_quests_on_death\"}\r\nSpeedhackDetection={config_parameter id=\"speedhack_detection\"}\r\nSpeedhackThreshold={config_parameter id=\"speedhack_threshold\"}\r\nbServerCritters={config_parameter id=\"enable_critters\"}\r\nbCritterBurrows={config_parameter id=\"enable_critter_burrows\"}\r\nServerMaxCritters={config_parameter id=\"max_critters\"}\r\nServerCritterDensityMultiplier={config_parameter id=\"critter_density_multiplier\"}\r\n;AllowedCritters={config_parameter id=\"allowed_critter_a\"}\r\n;DisallowedCritters={config_parameter id=\"disallowed_critter_a\"}\r\nbServerWaystones={config_parameter id=\"enable_waystones\"}\r\nbServerHomecaveCampingDebuff={config_parameter id=\"homecave_camping_debuff\"}\r\nbOverrideHomecaveCampingDistance={config_parameter id=\"override_homecave_camping_distance\"}\r\nHomecaveCampingDistance={config_parameter id=\"homecave_camping_distance\"}\r\nbOverrideHomecaveCampingDelay={config_parameter id=\"override_homecave_camping_delay\"}\r\nHomecaveCampingDelay={config_parameter id=\"homecave_camping_delay\"}\r\nbTrophyQuests={config_parameter id=\"trophy_quests\"}\r\nbOverrideTrophyQuestCooldown={config_parameter id=\"override_trophy_quest_cooldown\"}\r\nTrophyQuestCooldown={config_parameter id=\"trophy_quest_cooldown\"}\r\nMaxGroupQuests={config_parameter id=\"max_group_quests\"}\r\nbServerAllowAnselMultiplayerPausing={config_parameter id=\"allow_ansel_pause\"}\r\nServerAnselCameraConstraintDistance={config_parameter id=\"ansel_camera_constraint_distance\"}\r\nbServerAllowInGameWaystone={config_parameter id=\"allow_in_game_waystone\"}\r\nbServerLocalWorldQuests={config_parameter id=\"local_world_quests\"}\r\nServerMinTimeBetweenExplorationQuest={config_parameter id=\"min_time_between_exploration_quest\"}\r\nbEnforceWhitelist={config_parameter id=\"enforce_whitelist\"}\r\nServerAdmins={config_parameter id=\"server_admin_agid_a\"}\r\nServerAdmins={config_parameter id=\"server_admin_agid_b\"}\r\n;CurveOverrides=(CurveName=\"Global.LoginDebuffDuration\",Values=(60))\r\n;CurveOverrides=(CurveName=\"Global.LoginDebuffSpeedReduction\",Values=(0.75))\r\n;CurveOverrides=(CurveName=\"Global.LoginDebuffIncomingDamage\",Values=(2))\r\n;CurveOverrides=(CurveName=\"Global.LoginDebuffAttackDamage\",Values=(0.4))\r\n;CurveOverrides=(CurveName=\"Global.GroupLeaderBuffStaminaRecoveryMultiplier\",Values=(1.1))\r\n;CurveOverrides=(CurveName=\"Global.GroupLeaderBuffSpeedMultiplier\",Values=(1.05))\r\n;CurveOverrides=(CurveName=\"Global.InCombatDuration\",Values=(30))\r\n;CurveOverrides=(CurveName=\"Generic.InCombat.HealthRecovery.Multiplier\",Values=(0.5))\r\n;GroupSlotSizeOverrides=(DinoAssetID=\"Allosaurus\",GroupSize=5)\r\nbServerNesting={config_parameter id=\"server_nesting\"}\r\nbNestingDecorations={config_parameter id=\"nesting_decorations\"}\r\nbServerHatchlingCaveEggs={config_parameter id=\"hatchling_cave_eggs\"}\r\nbServerSameSpeciesAdoptionRestriction={config_parameter id=\"same_species_adoption_restriction\"}\r\nMinNestingGrowth={config_parameter id=\"min_nesting_growth\"}\r\nMaxNestImmunityBuffGrowth=0.25\r\nMaxNestRespawnGrowth=0.5\r\nMaxNestFreeRespawnGrowth=0.25\r\nMinNestRespawnCondition=0.5\r\nMinNestHealthForDecorations=0.5\r\nMinNestBabySlotFoodWater=0.0\r\nMinNestBabySlotResources=0.5\r\nMinNestHealthToEditAbilities=0.75\r\nMaxAdoptionGrowth=0.5\r\nMaxEatFromNestGrowth=0.5\r\nMaxDependentChildGrowth=0.5\r\nNestInactiveDespawnTimeSolo=120\r\nNestInactiveDespawnTimeDependents=120\r\nNestDisrepairDespawnTime=7200\r\nNestLowHealthThreshold=0.2\r\nNestBabySlotGenerationTime=300\r\nNestInvitationExpiryTime=15\r\nNestAcceptedInvitationExpiryTime=300\r\nFamilyBuffRange=5000\r\nNestResourceMultiplier={config_parameter id=\"nest_resource_multiplier\"}\r\nNestResourcelessConstructionSpeed=5.0\r\nbNestsInvulnerable={config_parameter id=\"nests_invulnerable\"}\r\nNestObstructionRadius=500\r\nbSpawnParentNestOnLogin={config_parameter id=\"spawn_parent_nest_on_login\"}\r\nbUseTutorialCustomGrowthMultiplier=false\r\nTutorialCustomGrowthMultiplier=1.0\r\nMinimumNestDistanceFromHomeRock=5000\r\nbServerEditAbilitiesAtNest={config_parameter id=\"edit_abilities_at_nest\"}\r\nMinNestBuffHealthPercent=0.5\r\nbServerShowMapIconPopularLocation=false\r\nServerMapIconPopularLocationPlayerCount=10\r\nServerLogoutAction=0\r\nbDisableGrouping=false\r\n\r\n[/Script/PathOfTitans.IGameMode]\r\nServerStartingTime={config_parameter id=\"server_starting_time\"}\r\nbServerDynamicTimeOfDay={config_parameter id=\"dynamic_time_of_day\"}\r\nbServerRestrictCarnivoreGrouping={config_parameter id=\"restrict_carnivore_grouping\"}\r\nbServerRestrictHerbivoreGrouping={config_parameter id=\"restrict_herbivore_grouping\"}\r\nServerDayLength={config_parameter id=\"server_day_length\"}\r\nServerNightLength={config_parameter id=\"server_night_length\"}\r\nMaxGroupSize={config_parameter id=\"max_group_size\"}\r\nFurthestSpawnInclusionRadius=250000\r\nDefaultCreatorModeSave={config_parameter id=\"default_creator_mode_save\"}\r\nMaxGroupLeaderCommunicationDistance={config_parameter id=\"group_leader_comm_distance\"}\r\n\r\n[SourceQuery]\r\nbEnabled=true\r\nPort={gameserver.query_port}\r\nIP=\"0.0.0.0\"\r\n\r\n[SourceRCON]\r\nbEnabled=true\r\nbLogging={config_parameter id=\"rcon_log_commands\"}\r\n; RCON logging is expected to write through the server log system under Saved/Logs.\r\n; GSA exposes that folder as: \\serverfiles\\PathOfTitans\\Saved\\Logs\r\n; No documented SourceRCON-specific filepath key was found, so custom LogFilePath keys are intentionally not enabled.\r\nPassword=\"{gameserver.rcon_password}\"\r\nPort={gameserver.rcon_port}\r\nIP=\"0.0.0.0\"\r\nMaxFailedAttempts={config_parameter id=\"rcon_max_failed_attempts\"}\r\nTimeout={config_parameter id=\"rcon_timeout\"}\r\nPageTimeout={config_parameter id=\"rcon_page_timeout\"}\r\nMaxConnectionsPerIP={config_parameter id=\"rcon_max_connections_per_ip\"}\r\n;IPAllowList={config_parameter id=\"rcon_ip_allowlist_a\"}\r\n;IPAllowList={config_parameter id=\"rcon_ip_allowlist_b\"}\r\n\r\n[ServerWebhooks]\r\n; Webhook URLs are optional. Keep them private, especially Discord webhook URLs.\r\nbEnabled={config_parameter id=\"webhooks_enabled\"}\r\nFormat=\"{config_parameter id=\"webhook_format\"}\"\r\nPlayerChat=\"{config_parameter id=\"player_chat_webhook\"}\"\r\nPlayerCommand=\"{config_parameter id=\"player_command_webhook\"}\"\r\nPlayerReport=\"{config_parameter id=\"player_report_webhook\"}\"\r\nPlayerLogin=\"{config_parameter id=\"player_login_webhook\"}\"\r\nPlayerLogout=\"{config_parameter id=\"player_logout_webhook\"}\"\r\nPlayerKilled=\"{config_parameter id=\"player_killed_webhook\"}\"\r\nAdminCommand=\"{config_parameter id=\"admin_command_webhook\"}\"\r\nServerError=\"{config_parameter id=\"server_error_webhook\"}\"\r\nSecurityAlert=\"{config_parameter id=\"security_alert_webhook\"}\"\r\n\r\n[BattlEye]\r\nbEnabled=true\r\n"
+                                                           },
+                                              "MOTD.txt":  {
+                                                               "path":  "\\serverfiles\\PathOfTitans\\Saved\\MOTD.txt",
+                                                               "info":  "Message of the Day. Path of Titans does not support Markdown or HTML here; use one Alderon formatting tag per line and close formatted text with \u003c/\u003e.",
+                                                               "disable_edit":  "0",
+                                                               "content":  "\u003cblue\u003eJoin us every Friday and Saturday for the Sarco dance-off competition.\u003c/\u003e\r\n\u003csmall\u003eWinners get 100 marks and a Dance Master role on our Discord server!\u003c/\u003e\r\n\r\nThanks and have fun!"
+                                                           },
+                                              "Rules.txt":  {
+                                                                "path":  "\\serverfiles\\PathOfTitans\\Saved\\Rules.txt",
+                                                                "info":  "Rules displayed on join. Path of Titans does not support Markdown or HTML here; use one Alderon formatting tag per line and close formatted text with \u003c/\u003e.",
+                                                                "disable_edit":  "0",
+                                                                "content":  "\u003ctitle\u003e{gameserver.list_name} Server Rules\u003c/\u003e\r\n\u003cred\u003e1 - Please only attack Camptos.\u003c/\u003e\r\nCamptosauruses are very evil!\r\n\r\n\u003corange\u003e2 - Corpse Cove is closed due to dirty water.\u003c/\u003e\r\n\r\nThese are the only rules on this server!\r\n\u003clarge\u003eThanks, and have fun!\u003c/\u003e"
+                                                            },
+                                              "Commands.ini":  {
+                                                                   "path":  "\\serverfiles\\PathOfTitans\\Saved\\Commands.ini",
+                                                                   "info":  "You must edit the Commands.ini to modify player roles",
+                                                                   "disable_edit":  "0",
+                                                                   "content":  "[Role:Teleporter]\r\n+Permission=teleport\r\n+Permission=teleportall\r\nChatColor=(R=0,G=255,B=0,A=255)\r\nOverrideAdminChatColor=True\r\nReservedSlot=True\r\n\r\n[PlayerRoles]\r\n123-456-789=Teleporter"
+                                                               },
+                                              "GameUserSettings.ini":  {
+                                                                           "path":  "\\serverfiles\\PathOfTitans\\Saved\\Config\\WindowsServer\\GameUserSettings.ini",
+                                                                           "info":  "This is almost exclusively used for your Mod List and some hardware-level settings.",
+                                                                           "disable_edit":  "0",
+                                                                           "content":  "[PathOfTitans.Mods]\r\n\r\n; Add one EnabledMods line per mod when needed:\r\n; EnabledMods=\"UGC_M_EXAMPLEMODID_SK\""
+                                                                       },
+                                              "whitelist.txt":  {
+                                                                    "path":  "\\serverfiles\\PathOfTitans\\Saved\\whitelist.txt",
+                                                                    "info":  "Path of Titans whitelist. Add one Alderon ID per line when whitelist enforcement is enabled.",
+                                                                    "disable_edit":  "0",
+                                                                    "content":  ""
+                                                                }
+                                          },
+                                "parameters":  {
+                                                   "auth_token":  {
+                                                                      "name":  "Alderon Auth Token",
+                                                                      "info":  "Required. Alderon Games auth token used by AlderonGamesCmd to install and update Path of Titans server files.",
+                                                                      "section":  "Server Setup",
+                                                                      "type":  "text",
+                                                                      "content":  ""
+                                                                  },
+                                                   "database":  {
+                                                                    "name":  "Database Mode",
+                                                                    "info":  "Passed to Captain Gecko pot-server as DATABASE. Use Remote for most community servers; Local is only for local database setups.",
+                                                                    "section":  "Server Setup",
+                                                                    "type":  "array",
+                                                                    "dropdown":  "{\"Remote\":\"Remote\",\"Local\":\"Local\"}"
+                                                                },
+                                                   "branch":  {
+                                                                  "name":  "Branch",
+                                                                  "info":  "Path of Titans branch key. Usually production.",
+                                                                  "section":  "Server Setup",
+                                                                  "type":  "text",
+                                                                  "content":  "production"
+                                                              },
+                                                   "additional_launch_params":  {
+                                                                                    "name":  "Additional Launch Arguments",
+                                                                                    "info":  "Optional literal Path of Titans launch arguments only. Do not add QueryPort, QueryIP, RconPort, RconIP, MULTIHOME, ServerListIP, or -log here; query and RCON are written in Game.ini by the blueprint.",
+                                                                                    "section":  "Server Setup",
+                                                                                    "type":  "text",
+                                                                                    "content":  ""
+                                                                                },
+                                                   "map":  {
+                                                               "name":  "Map",
+                                                               "info":  "Path of Titans internal map name. Use Island for Gondwa, Panjura for Panjura, Riparia for Riparia, or the exact modded map name.",
+                                                               "section":  "Game",
+                                                               "type":  "text",
+                                                               "content":  "Island"
+                                                           },
+                                                   "server_password":  {
+                                                                           "name":  "Server Password",
+                                                                           "info":  "Optional join password. Leave blank for public access.",
+                                                                           "section":  "Access",
+                                                                           "type":  "text",
+                                                                           "content":  ""
+                                                                       },
+                                                   "reserved_slots":  {
+                                                                          "name":  "Reserved/Admin Slots",
+                                                                          "info":  "Number of slots reserved exclusively for admins or reserved-slot roles.",
+                                                                          "section":  "Access",
+                                                                          "type":  "text",
+                                                                          "content":  "0"
+                                                                      },
+                                                   "server_discord_invite_code":  {
+                                                                                      "name":  "Discord Invite Code",
+                                                                                      "info":  "Create a permanent Discord invite and paste only the generated code, not the full invite URL.",
+                                                                                      "section":  "Game",
+                                                                                      "type":  "text",
+                                                                                      "content":  ""
+                                                                                  },
+                                                   "server_admin_agid_a":  {
+                                                                               "name":  "Server Admin Alderon ID A",
+                                                                               "info":  "Optional ServerAdmins slot. Enter an Alderon Games ID; the blueprint writes an active ServerAdmins line in Game.ini. Leave blank if unused.",
+                                                                               "section":  "Access",
+                                                                               "type":  "text",
+                                                                               "content":  ""
+                                                                           },
+                                                   "server_admin_agid_b":  {
+                                                                               "name":  "Server Admin Alderon ID B",
+                                                                               "info":  "Optional second ServerAdmins slot. Enter an Alderon Games ID; the blueprint writes an active ServerAdmins line in Game.ini. Leave blank if unused.",
+                                                                               "section":  "Access",
+                                                                               "type":  "text",
+                                                                               "content":  ""
+                                                                           },
+                                                   "paid_users_only":  {
+                                                                           "name":  "Paid Users Only",
+                                                                           "info":  "Restrict the server to paid users only.",
+                                                                           "section":  "Access",
+                                                                           "type":  "boolean",
+                                                                           "content":  "0"
+                                                                       },
+                                                   "enforce_whitelist":  {
+                                                                             "name":  "Enforce Whitelist",
+                                                                             "info":  "Require players to be listed in whitelist.txt before joining.",
+                                                                             "section":  "Access",
+                                                                             "type":  "boolean",
+                                                                             "content":  "0"
+                                                                         },
+                                                   "allow_chat":  {
+                                                                      "name":  "Allow Chat",
+                                                                      "info":  "Enable or disable text chat for the entire server.",
+                                                                      "section":  "Access",
+                                                                      "type":  "boolean",
+                                                                      "content":  "1"
+                                                                  },
+                                                   "allow_global_chat":  {
+                                                                             "name":  "Global Chat",
+                                                                             "info":  "Enable or disable the global chat channel.",
+                                                                             "section":  "Access",
+                                                                             "type":  "boolean",
+                                                                             "content":  "1"
+                                                                         },
+                                                   "show_name_tags":  {
+                                                                          "name":  "Player Name Tags",
+                                                                          "info":  "Allow all players to see player name tags. Defaults off for a more survival-focused server.",
+                                                                          "section":  "Access",
+                                                                          "type":  "boolean",
+                                                                          "content":  "0"
+                                                                      },
+                                                   "allow_map":  {
+                                                                     "name":  "Full Map",
+                                                                     "info":  "Enable or disable the full map.",
+                                                                     "section":  "Access",
+                                                                     "type":  "boolean",
+                                                                     "content":  "1"
+                                                                 },
+                                                   "allow_minimap":  {
+                                                                         "name":  "Minimap",
+                                                                         "info":  "Enable or disable the minimap.",
+                                                                         "section":  "Access",
+                                                                         "type":  "boolean",
+                                                                         "content":  "1"
+                                                                     },
+                                                   "allow_three_d_map_markers":  {
+                                                                                     "name":  "3D Map Markers",
+                                                                                     "info":  "Enable or disable markers on the full map and floating quest markers.",
+                                                                                     "section":  "Access",
+                                                                                     "type":  "boolean",
+                                                                                     "content":  "1"
+                                                                                 },
+                                                   "server_auto_restart":  {
+                                                                               "name":  "Path of Titans Auto Restart",
+                                                                               "info":  "Path of Titans internal auto-restart toggle. Leave disabled when GSA handles scheduled restarts and container recovery.",
+                                                                               "section":  "Game",
+                                                                               "type":  "boolean",
+                                                                               "content":  "0"
+                                                                           },
+                                                   "server_starting_time":  {
+                                                                                "name":  "World Time On Startup",
+                                                                                "info":  "Time of day after restart, scaled 0-2400. Example: 1350.",
+                                                                                "section":  "Game",
+                                                                                "type":  "text",
+                                                                                "content":  "1350"
+                                                                            },
+                                                   "dynamic_time_of_day":  {
+                                                                               "name":  "Dynamic Time of Day",
+                                                                               "info":  "1 enables animated day/night cycle. 0 uses fixed ServerStartingTime.",
+                                                                               "section":  "Game",
+                                                                               "type":  "boolean",
+                                                                               "content":  "1"
+                                                                           },
+                                                   "server_day_length":  {
+                                                                             "name":  "Day Length Minutes",
+                                                                             "info":  "Length in minutes of the daylight cycle.",
+                                                                             "section":  "Game",
+                                                                             "type":  "text",
+                                                                             "content":  "60"
+                                                                         },
+                                                   "server_night_length":  {
+                                                                               "name":  "Night Length Minutes",
+                                                                               "info":  "Length in minutes of the night cycle.",
+                                                                               "section":  "Game",
+                                                                               "type":  "text",
+                                                                               "content":  "30"
+                                                                           },
+                                                   "weather_length_min":  {
+                                                                              "name":  "Weather Length Min",
+                                                                              "info":  "Minimum minutes a weather type can stay active.",
+                                                                              "section":  "Game",
+                                                                              "type":  "text",
+                                                                              "content":  "10"
+                                                                          },
+                                                   "weather_length_max":  {
+                                                                              "name":  "Weather Length Max",
+                                                                              "info":  "Maximum minutes a weather type can stay active.",
+                                                                              "section":  "Game",
+                                                                              "type":  "text",
+                                                                              "content":  "20"
+                                                                          },
+                                                   "weather_blend_min":  {
+                                                                             "name":  "Weather Blend Min",
+                                                                             "info":  "Minimum minutes for weather transition blending.",
+                                                                             "section":  "Game",
+                                                                             "type":  "text",
+                                                                             "content":  "1"
+                                                                         },
+                                                   "weather_blend_max":  {
+                                                                             "name":  "Weather Blend Max",
+                                                                             "info":  "Maximum minutes for weather transition blending.",
+                                                                             "section":  "Game",
+                                                                             "type":  "text",
+                                                                             "content":  "2"
+                                                                         },
+                                                   "max_group_size":  {
+                                                                          "name":  "Maximum Group Size",
+                                                                          "info":  "Maximum number of group slots allowed for player groups.",
+                                                                          "section":  "General Gameplay",
+                                                                          "type":  "text",
+                                                                          "content":  "10"
+                                                                      },
+                                                   "restrict_carnivore_grouping":  {
+                                                                                       "name":  "Restrict Carnivore Grouping",
+                                                                                       "info":  "Prevent mixed carnivore grouping when enabled.",
+                                                                                       "section":  "General Gameplay",
+                                                                                       "type":  "boolean",
+                                                                                       "content":  "0"
+                                                                                   },
+                                                   "restrict_herbivore_grouping":  {
+                                                                                       "name":  "Restrict Herbivore Grouping",
+                                                                                       "info":  "Prevent mixed herbivore grouping when enabled.",
+                                                                                       "section":  "General Gameplay",
+                                                                                       "type":  "boolean",
+                                                                                       "content":  "0"
+                                                                                   },
+                                                   "combat_timer_applies_to_group":  {
+                                                                                         "name":  "Combat Timer Applies To Group",
+                                                                                         "info":  "When enabled, combat timers apply to the whole group.",
+                                                                                         "section":  "General Gameplay",
+                                                                                         "type":  "boolean",
+                                                                                         "content":  "1"
+                                                                                     },
+                                                   "group_leader_comm_distance":  {
+                                                                                      "name":  "Group Leader Communication Distance",
+                                                                                      "info":  "Maximum group leader communication distance.",
+                                                                                      "section":  "General Gameplay",
+                                                                                      "type":  "text",
+                                                                                      "content":  "50000"
+                                                                                  },
+                                                   "max_group_quests":  {
+                                                                            "name":  "Maximum Group Quests",
+                                                                            "info":  "Maximum concurrent group quests.",
+                                                                            "section":  "General Gameplay",
+                                                                            "type":  "text",
+                                                                            "content":  "2"
+                                                                        },
+                                                   "server_growth":  {
+                                                                         "name":  "Enable Growth",
+                                                                         "info":  "Enable dinosaur growth. Disabling spawns characters as adults.",
+                                                                         "section":  "Growth and Death",
+                                                                         "type":  "boolean",
+                                                                         "content":  "1"
+                                                                     },
+                                                   "passive_growth_per_minute":  {
+                                                                                     "name":  "Passive Growth Per Minute",
+                                                                                     "info":  "Additional passive growth per minute. 0 disables passive growth.",
+                                                                                     "section":  "Growth and Death",
+                                                                                     "type":  "text",
+                                                                                     "content":  "0"
+                                                                                 },
+                                                   "quest_growth_multiplier":  {
+                                                                                   "name":  "Quest Growth Multiplier",
+                                                                                   "info":  "Multiplier for growth earned from quests.",
+                                                                                   "section":  "Growth and Death",
+                                                                                   "type":  "text",
+                                                                                   "content":  "1"
+                                                                               },
+                                                   "quest_marks_multiplier":  {
+                                                                                  "name":  "Quest Marks Multiplier",
+                                                                                  "info":  "Multiplier for marks earned from quests.",
+                                                                                  "section":  "Growth and Death",
+                                                                                  "type":  "text",
+                                                                                  "content":  "1.0"
+                                                                              },
+                                                   "override_local_quest_cooldown":  {
+                                                                                         "name":  "Override Local Quest Cooldown",
+                                                                                         "info":  "Enable a custom cooldown for local quests.",
+                                                                                         "section":  "Growth and Death",
+                                                                                         "type":  "boolean",
+                                                                                         "content":  "0"
+                                                                                     },
+                                                   "local_quest_cooldown":  {
+                                                                                "name":  "Local Quest Cooldown Seconds",
+                                                                                "info":  "Custom local quest cooldown in seconds. Only applies when the override is enabled.",
+                                                                                "section":  "Growth and Death",
+                                                                                "type":  "text",
+                                                                                "content":  "0"
+                                                                            },
+                                                   "override_location_quest_cooldown":  {
+                                                                                            "name":  "Override Location Quest Cooldown",
+                                                                                            "info":  "Enable a custom cooldown for location quests.",
+                                                                                            "section":  "Growth and Death",
+                                                                                            "type":  "boolean",
+                                                                                            "content":  "0"
+                                                                                        },
+                                                   "location_quest_cooldown":  {
+                                                                                   "name":  "Location Quest Cooldown Seconds",
+                                                                                   "info":  "Custom location quest cooldown in seconds. Only applies when the override is enabled.",
+                                                                                   "section":  "Growth and Death",
+                                                                                   "type":  "text",
+                                                                                   "content":  "0"
+                                                                               },
+                                                   "min_growth_after_death":  {
+                                                                                  "name":  "Minimum Growth After Death",
+                                                                                  "info":  "Minimum growth a player can be rolled back to after death.",
+                                                                                  "section":  "Growth and Death",
+                                                                                  "type":  "text",
+                                                                                  "content":  "0.5"
+                                                                              },
+                                                   "lose_growth_past_growth_stages":  {
+                                                                                          "name":  "Lose Growth Past Growth Stages",
+                                                                                          "info":  "Allows death penalties to roll growth back past stage thresholds.",
+                                                                                          "section":  "Growth and Death",
+                                                                                          "type":  "boolean",
+                                                                                          "content":  "1"
+                                                                                      },
+                                                   "combat_death_marks_penalty_percent":  {
+                                                                                              "name":  "Combat Death Marks Penalty %",
+                                                                                              "info":  "Marks penalty percentage for combat deaths.",
+                                                                                              "section":  "Growth and Death",
+                                                                                              "type":  "text",
+                                                                                              "content":  "25"
+                                                                                          },
+                                                   "combat_death_growth_penalty_percent":  {
+                                                                                               "name":  "Combat Death Growth Penalty %",
+                                                                                               "info":  "Growth penalty percentage for combat deaths.",
+                                                                                               "section":  "Growth and Death",
+                                                                                               "type":  "text",
+                                                                                               "content":  "10"
+                                                                                           },
+                                                   "fall_death_marks_penalty_percent":  {
+                                                                                            "name":  "Fall Death Marks Penalty %",
+                                                                                            "info":  "Marks penalty percentage for fall deaths.",
+                                                                                            "section":  "Growth and Death",
+                                                                                            "type":  "text",
+                                                                                            "content":  "5"
+                                                                                        },
+                                                   "fall_death_growth_penalty_percent":  {
+                                                                                             "name":  "Fall Death Growth Penalty %",
+                                                                                             "info":  "Growth penalty percentage for fall deaths.",
+                                                                                             "section":  "Growth and Death",
+                                                                                             "type":  "text",
+                                                                                             "content":  "2"
+                                                                                         },
+                                                   "survival_death_marks_penalty_percent":  {
+                                                                                                "name":  "Survival Death Marks Penalty %",
+                                                                                                "info":  "Marks penalty percentage for survival deaths.",
+                                                                                                "section":  "Growth and Death",
+                                                                                                "type":  "text",
+                                                                                                "content":  "10"
+                                                                                            },
+                                                   "survival_death_growth_penalty_percent":  {
+                                                                                                 "name":  "Survival Death Growth Penalty %",
+                                                                                                 "info":  "Growth penalty percentage for survival deaths.",
+                                                                                                 "section":  "Growth and Death",
+                                                                                                 "type":  "text",
+                                                                                                 "content":  "5"
+                                                                                             },
+                                                   "fall_damage":  {
+                                                                       "name":  "Fall Damage",
+                                                                       "info":  "Enable or disable fall damage.",
+                                                                       "section":  "Growth and Death",
+                                                                       "type":  "boolean",
+                                                                       "content":  "1"
+                                                                   },
+                                                   "perma_death":  {
+                                                                       "name":  "Permanent Death",
+                                                                       "info":  "Experimental permanent death. Use carefully.",
+                                                                       "section":  "Growth and Death",
+                                                                       "type":  "boolean",
+                                                                       "content":  "0"
+                                                                   },
+                                                   "death_info":  {
+                                                                      "name":  "Death Info",
+                                                                      "info":  "Show dead-character info when permanent death is enabled.",
+                                                                      "section":  "Growth and Death",
+                                                                      "type":  "boolean",
+                                                                      "content":  "0"
+                                                                  },
+                                                   "lose_quests_on_death":  {
+                                                                                "name":  "Lose Quests On Death",
+                                                                                "info":  "Remove active quests on death.",
+                                                                                "section":  "Growth and Death",
+                                                                                "type":  "boolean",
+                                                                                "content":  "1"
+                                                                            },
+                                                   "allow_change_subspecies":  {
+                                                                                   "name":  "Allow Change Subspecies",
+                                                                                   "info":  "Allow players to change subspecies.",
+                                                                                   "section":  "Growth and Death",
+                                                                                   "type":  "boolean",
+                                                                                   "content":  "1"
+                                                                               },
+                                                   "change_subspecies_growth_penalty_percent":  {
+                                                                                                    "name":  "Change Subspecies Growth Penalty %",
+                                                                                                    "info":  "Growth penalty percentage for changing subspecies.",
+                                                                                                    "section":  "Growth and Death",
+                                                                                                    "type":  "text",
+                                                                                                    "content":  "25"
+                                                                                                },
+                                                   "enable_fish":  {
+                                                                       "name":  "Fish",
+                                                                       "info":  "Enable or disable fish spawning.",
+                                                                       "section":  "World and Survival",
+                                                                       "type":  "boolean",
+                                                                       "content":  "1"
+                                                                   },
+                                                   "enable_water_quality_system":  {
+                                                                                       "name":  "Water Quality System",
+                                                                                       "info":  "Enable or disable the water quality system.",
+                                                                                       "section":  "World and Survival",
+                                                                                       "type":  "boolean",
+                                                                                       "content":  "1"
+                                                                                   },
+                                                   "override_water_regeneration":  {
+                                                                                       "name":  "Override Water Regeneration",
+                                                                                       "info":  "Enable custom water regeneration settings.",
+                                                                                       "section":  "World and Survival",
+                                                                                       "type":  "boolean",
+                                                                                       "content":  "0"
+                                                                                   },
+                                                   "enable_water_regeneration":  {
+                                                                                     "name":  "Enable Water Regeneration",
+                                                                                     "info":  "Allow water to naturally regenerate over time.",
+                                                                                     "section":  "World and Survival",
+                                                                                     "type":  "boolean",
+                                                                                     "content":  "1"
+                                                                                 },
+                                                   "water_regen_update_seconds":  {
+                                                                                      "name":  "Water Regen Update Seconds",
+                                                                                      "info":  "Water regeneration update interval.",
+                                                                                      "section":  "World and Survival",
+                                                                                      "type":  "text",
+                                                                                      "content":  "180"
+                                                                                  },
+                                                   "water_regen_rate_seconds":  {
+                                                                                    "name":  "Water Regen Rate Seconds",
+                                                                                    "info":  "Seconds between water regeneration applications.",
+                                                                                    "section":  "World and Survival",
+                                                                                    "type":  "text",
+                                                                                    "content":  "60"
+                                                                                },
+                                                   "water_regen_value":  {
+                                                                             "name":  "Water Regen Value",
+                                                                             "info":  "Amount of water regenerated each cycle.",
+                                                                             "section":  "World and Survival",
+                                                                             "type":  "text",
+                                                                             "content":  "10"
+                                                                         },
+                                                   "water_rain_regen_increment":  {
+                                                                                      "name":  "Water Rain Regen Increment",
+                                                                                      "info":  "Rain regeneration multiplier/increment.",
+                                                                                      "section":  "World and Survival",
+                                                                                      "type":  "text",
+                                                                                      "content":  "20.0"
+                                                                                  },
+                                                   "dead_body_time":  {
+                                                                          "name":  "Dead Body Time",
+                                                                          "info":  "Body cleanup timer. 0 lets bodies persist until fully decayed.",
+                                                                          "section":  "World and Survival",
+                                                                          "type":  "text",
+                                                                          "content":  "0"
+                                                                      },
+                                                   "respawn_time":  {
+                                                                        "name":  "Respawn Time Minutes",
+                                                                        "info":  "Minutes a player must be alive before /respawn can be used.",
+                                                                        "section":  "World and Survival",
+                                                                        "type":  "text",
+                                                                        "content":  "45"
+                                                                    },
+                                                   "footprint_lifetime":  {
+                                                                              "name":  "Footprint Lifetime Seconds",
+                                                                              "info":  "Maximum footprint lifetime in seconds. 0 disables footprints.",
+                                                                              "section":  "World and Survival",
+                                                                              "type":  "text",
+                                                                              "content":  "60"
+                                                                          },
+                                                   "afk_disconnect_time":  {
+                                                                               "name":  "AFK Disconnect Seconds",
+                                                                               "info":  "Seconds before AFK players are disconnected. 0 disables.",
+                                                                               "section":  "World and Survival",
+                                                                               "type":  "text",
+                                                                               "content":  "600"
+                                                                           },
+                                                   "max_client_ping_ms":  {
+                                                                              "name":  "Max Client Ping Ms",
+                                                                              "info":  "Maximum client ping. 0 disables ping enforcement.",
+                                                                              "section":  "World and Survival",
+                                                                              "type":  "text",
+                                                                              "content":  "0"
+                                                                          },
+                                                   "max_client_ping_duration":  {
+                                                                                    "name":  "Max Client Ping Duration",
+                                                                                    "info":  "Duration a player can exceed max ping before action. 0 disables.",
+                                                                                    "section":  "World and Survival",
+                                                                                    "type":  "text",
+                                                                                    "content":  "0"
+                                                                                },
+                                                   "logout_time":  {
+                                                                       "name":  "Logout Timer Seconds",
+                                                                       "info":  "Logout timer in seconds.",
+                                                                       "section":  "World and Survival",
+                                                                       "type":  "text",
+                                                                       "content":  "60"
+                                                                   },
+                                                   "anti_revenge_kill":  {
+                                                                             "name":  "Anti Revenge Kill",
+                                                                             "info":  "Enable anti-revenge-kill behavior.",
+                                                                             "section":  "World and Survival",
+                                                                             "type":  "boolean",
+                                                                             "content":  "1"
+                                                                         },
+                                                   "revenge_kill_distance":  {
+                                                                                 "name":  "Revenge Kill Distance",
+                                                                                 "info":  "Distance used by anti-revenge-kill behavior.",
+                                                                                 "section":  "World and Survival",
+                                                                                 "type":  "text",
+                                                                                 "content":  "100000"
+                                                                             },
+                                                   "max_characters_per_player":  {
+                                                                                     "name":  "Max Characters Per Player",
+                                                                                     "info":  "Maximum characters each player may have.",
+                                                                                     "section":  "World and Survival",
+                                                                                     "type":  "text",
+                                                                                     "content":  "30"
+                                                                                 },
+                                                   "max_characters_per_species":  {
+                                                                                      "name":  "Max Characters Per Species",
+                                                                                      "info":  "Maximum characters per species per player.",
+                                                                                      "section":  "World and Survival",
+                                                                                      "type":  "text",
+                                                                                      "content":  "1"
+                                                                                  },
+                                                   "allow_replay_recording":  {
+                                                                                  "name":  "Replay Recording",
+                                                                                  "info":  "Enable multiplayer replay recording.",
+                                                                                  "section":  "World and Survival",
+                                                                                  "type":  "boolean",
+                                                                                  "content":  "0"
+                                                                              },
+                                                   "speedhack_detection":  {
+                                                                               "name":  "Speedhack Detection",
+                                                                               "info":  "Speedhack detection mode. Leave default unless troubleshooting.",
+                                                                               "section":  "World and Survival",
+                                                                               "type":  "text",
+                                                                               "content":  "1"
+                                                                           },
+                                                   "speedhack_threshold":  {
+                                                                               "name":  "Speedhack Threshold",
+                                                                               "info":  "Speedhack detection threshold. Leave default unless troubleshooting.",
+                                                                               "section":  "World and Survival",
+                                                                               "type":  "text",
+                                                                               "content":  "10"
+                                                                           },
+                                                   "home_caves":  {
+                                                                      "name":  "Home Caves",
+                                                                      "info":  "Enable or disable home caves.",
+                                                                      "section":  "Caves and Nesting",
+                                                                      "type":  "boolean",
+                                                                      "content":  "1"
+                                                                  },
+                                                   "well_rested_buff":  {
+                                                                            "name":  "Well Rested Buff",
+                                                                            "info":  "Enable or disable the home-cave well rested buff.",
+                                                                            "section":  "Caves and Nesting",
+                                                                            "type":  "boolean",
+                                                                            "content":  "1"
+                                                                        },
+                                                   "edit_abilities_in_home_caves":  {
+                                                                                        "name":  "Edit Abilities In Home Caves",
+                                                                                        "info":  "Require ability edits to happen in home caves when enabled.",
+                                                                                        "section":  "Caves and Nesting",
+                                                                                        "type":  "boolean",
+                                                                                        "content":  "1"
+                                                                                    },
+                                                   "edit_abilities_while_sleeping":  {
+                                                                                         "name":  "Edit Abilities While Sleeping",
+                                                                                         "info":  "Require sleeping for ability edits when enabled.",
+                                                                                         "section":  "Caves and Nesting",
+                                                                                         "type":  "boolean",
+                                                                                         "content":  "0"
+                                                                                     },
+                                                   "hatchling_caves":  {
+                                                                           "name":  "Hatchling Caves",
+                                                                           "info":  "Enable hatchling/tutorial caves.",
+                                                                           "section":  "Caves and Nesting",
+                                                                           "type":  "boolean",
+                                                                           "content":  "1"
+                                                                       },
+                                                   "hatchling_cave_exit_growth":  {
+                                                                                      "name":  "Hatchling Cave Exit Growth",
+                                                                                      "info":  "Growth when exiting hatchling cave.",
+                                                                                      "section":  "Caves and Nesting",
+                                                                                      "type":  "text",
+                                                                                      "content":  "0.25"
+                                                                                  },
+                                                   "hunger_thirst_in_caves":  {
+                                                                                  "name":  "Hunger/Thirst In Caves",
+                                                                                  "info":  "Allow hunger and thirst drain inside caves.",
+                                                                                  "section":  "Caves and Nesting",
+                                                                                  "type":  "boolean",
+                                                                                  "content":  "0"
+                                                                              },
+                                                   "homecave_camping_debuff":  {
+                                                                                   "name":  "Homecave Camping Debuff",
+                                                                                   "info":  "Enable homecave camping debuff.",
+                                                                                   "section":  "Caves and Nesting",
+                                                                                   "type":  "boolean",
+                                                                                   "content":  "1"
+                                                                               },
+                                                   "override_homecave_camping_distance":  {
+                                                                                              "name":  "Override Homecave Camping Distance",
+                                                                                              "info":  "Enable custom homecave camping distance.",
+                                                                                              "section":  "Caves and Nesting",
+                                                                                              "type":  "boolean",
+                                                                                              "content":  "0"
+                                                                                          },
+                                                   "homecave_camping_distance":  {
+                                                                                     "name":  "Homecave Camping Distance",
+                                                                                     "info":  "Distance for homecave camping detection.",
+                                                                                     "section":  "Caves and Nesting",
+                                                                                     "type":  "text",
+                                                                                     "content":  "20000"
+                                                                                 },
+                                                   "override_homecave_camping_delay":  {
+                                                                                           "name":  "Override Homecave Camping Delay",
+                                                                                           "info":  "Enable custom homecave camping delay.",
+                                                                                           "section":  "Caves and Nesting",
+                                                                                           "type":  "boolean",
+                                                                                           "content":  "0"
+                                                                                       },
+                                                   "homecave_camping_delay":  {
+                                                                                  "name":  "Homecave Camping Delay Seconds",
+                                                                                  "info":  "Delay for homecave camping detection.",
+                                                                                  "section":  "Caves and Nesting",
+                                                                                  "type":  "text",
+                                                                                  "content":  "180"
+                                                                              },
+                                                   "server_nesting":  {
+                                                                          "name":  "Nesting",
+                                                                          "info":  "Enable nesting.",
+                                                                          "section":  "Caves and Nesting",
+                                                                          "type":  "boolean",
+                                                                          "content":  "1"
+                                                                      },
+                                                   "nesting_decorations":  {
+                                                                               "name":  "Nest Decorations",
+                                                                               "info":  "Enable nest decorations.",
+                                                                               "section":  "Caves and Nesting",
+                                                                               "type":  "boolean",
+                                                                               "content":  "1"
+                                                                           },
+                                                   "hatchling_cave_eggs":  {
+                                                                               "name":  "Hatchling Cave Eggs",
+                                                                               "info":  "Enable hatchling cave eggs.",
+                                                                               "section":  "Caves and Nesting",
+                                                                               "type":  "boolean",
+                                                                               "content":  "1"
+                                                                           },
+                                                   "same_species_adoption_restriction":  {
+                                                                                             "name":  "Same Species Adoption Restriction",
+                                                                                             "info":  "Restrict adoption to same species when enabled.",
+                                                                                             "section":  "Caves and Nesting",
+                                                                                             "type":  "boolean",
+                                                                                             "content":  "0"
+                                                                                         },
+                                                   "min_nesting_growth":  {
+                                                                              "name":  "Minimum Nesting Growth",
+                                                                              "info":  "Minimum growth required for nesting.",
+                                                                              "section":  "Caves and Nesting",
+                                                                              "type":  "text",
+                                                                              "content":  "0.75"
+                                                                          },
+                                                   "nest_resource_multiplier":  {
+                                                                                    "name":  "Nest Resource Multiplier",
+                                                                                    "info":  "Nest resource multiplier.",
+                                                                                    "section":  "Caves and Nesting",
+                                                                                    "type":  "text",
+                                                                                    "content":  "1.0"
+                                                                                },
+                                                   "nests_invulnerable":  {
+                                                                              "name":  "Nests Invulnerable",
+                                                                              "info":  "Make nests invulnerable when enabled.",
+                                                                              "section":  "Caves and Nesting",
+                                                                              "type":  "boolean",
+                                                                              "content":  "0"
+                                                                          },
+                                                   "spawn_parent_nest_on_login":  {
+                                                                                      "name":  "Spawn Parent Nest On Login",
+                                                                                      "info":  "Spawn parent nest on login when enabled.",
+                                                                                      "section":  "Caves and Nesting",
+                                                                                      "type":  "boolean",
+                                                                                      "content":  "0"
+                                                                                  },
+                                                   "edit_abilities_at_nest":  {
+                                                                                  "name":  "Edit Abilities At Nest",
+                                                                                  "info":  "Allow ability edits at nests.",
+                                                                                  "section":  "Caves and Nesting",
+                                                                                  "type":  "boolean",
+                                                                                  "content":  "1"
+                                                                              },
+                                                   "enable_critters":  {
+                                                                           "name":  "Critters",
+                                                                           "info":  "Enable critters.",
+                                                                           "section":  "World Systems",
+                                                                           "type":  "boolean",
+                                                                           "content":  "1"
+                                                                       },
+                                                   "enable_critter_burrows":  {
+                                                                                  "name":  "Critter Burrows",
+                                                                                  "info":  "Enable critter burrows.",
+                                                                                  "section":  "World Systems",
+                                                                                  "type":  "boolean",
+                                                                                  "content":  "1"
+                                                                              },
+                                                   "max_critters":  {
+                                                                        "name":  "Max Critters",
+                                                                        "info":  "Maximum critters on the server.",
+                                                                        "section":  "World Systems",
+                                                                        "type":  "text",
+                                                                        "content":  "200"
+                                                                    },
+                                                   "critter_density_multiplier":  {
+                                                                                      "name":  "Critter Density Multiplier",
+                                                                                      "info":  "Critter density multiplier.",
+                                                                                      "section":  "World Systems",
+                                                                                      "type":  "text",
+                                                                                      "content":  "0.75"
+                                                                                  },
+                                                   "enable_waystones":  {
+                                                                            "name":  "Waystones",
+                                                                            "info":  "Enable waystones.",
+                                                                            "section":  "World Systems",
+                                                                            "type":  "boolean",
+                                                                            "content":  "1"
+                                                                        },
+                                                   "waystone_cooldown_removal":  {
+                                                                                     "name":  "Waystone Cooldown Removal",
+                                                                                     "info":  "Allow marks to remove waystone cooldowns.",
+                                                                                     "section":  "World Systems",
+                                                                                     "type":  "boolean",
+                                                                                     "content":  "1"
+                                                                                 },
+                                                   "waystone_cooldown_override":  {
+                                                                                      "name":  "Waystone Cooldown Override",
+                                                                                      "info":  "Override waystone cooldown in seconds. -1 uses default.",
+                                                                                      "section":  "World Systems",
+                                                                                      "type":  "text",
+                                                                                      "content":  "-1"
+                                                                                  },
+                                                   "allow_in_game_waystone":  {
+                                                                                  "name":  "In-Game Waystone",
+                                                                                  "info":  "Allow in-game waystone use.",
+                                                                                  "section":  "World Systems",
+                                                                                  "type":  "boolean",
+                                                                                  "content":  "1"
+                                                                              },
+                                                   "trophy_quests":  {
+                                                                         "name":  "Trophy Quests",
+                                                                         "info":  "Enable trophy quests.",
+                                                                         "section":  "World Systems",
+                                                                         "type":  "boolean",
+                                                                         "content":  "1"
+                                                                     },
+                                                   "override_trophy_quest_cooldown":  {
+                                                                                          "name":  "Override Trophy Quest Cooldown",
+                                                                                          "info":  "Enable custom trophy quest cooldown.",
+                                                                                          "section":  "World Systems",
+                                                                                          "type":  "boolean",
+                                                                                          "content":  "0"
+                                                                                      },
+                                                   "trophy_quest_cooldown":  {
+                                                                                 "name":  "Trophy Quest Cooldown Seconds",
+                                                                                 "info":  "Cooldown for trophy quests.",
+                                                                                 "section":  "World Systems",
+                                                                                 "type":  "text",
+                                                                                 "content":  "1800"
+                                                                             },
+                                                   "local_world_quests":  {
+                                                                              "name":  "Local World Quests",
+                                                                              "info":  "Enable local world quests.",
+                                                                              "section":  "World Systems",
+                                                                              "type":  "boolean",
+                                                                              "content":  "1"
+                                                                          },
+                                                   "min_time_between_exploration_quest":  {
+                                                                                              "name":  "Min Time Between Exploration Quest",
+                                                                                              "info":  "Minimum time between exploration quests.",
+                                                                                              "section":  "World Systems",
+                                                                                              "type":  "text",
+                                                                                              "content":  "30"
+                                                                                          },
+                                                   "override_max_complete_quests":  {
+                                                                                        "name":  "Override Max Complete Quests In Location",
+                                                                                        "info":  "Enable custom MaxCompleteQuestsInLocation.",
+                                                                                        "section":  "World Systems",
+                                                                                        "type":  "boolean",
+                                                                                        "content":  "0"
+                                                                                    },
+                                                   "max_complete_quests_in_location":  {
+                                                                                           "name":  "Max Complete Quests In Location",
+                                                                                           "info":  "Quests required within a POI before it is completed.",
+                                                                                           "section":  "World Systems",
+                                                                                           "type":  "text",
+                                                                                           "content":  "3"
+                                                                                       },
+                                                   "poi_discovery_rewards":  {
+                                                                                 "name":  "POI Discovery Rewards",
+                                                                                 "info":  "Enable POI discovery rewards.",
+                                                                                 "section":  "World Systems",
+                                                                                 "type":  "boolean",
+                                                                                 "content":  "1"
+                                                                             },
+                                                   "enable_explore_quests":  {
+                                                                                 "name":  "Explore Quests",
+                                                                                 "info":  "Enable exploration quests.",
+                                                                                 "section":  "World Systems",
+                                                                                 "type":  "boolean",
+                                                                                 "content":  "1"
+                                                                             },
+                                                   "allow_ansel_pause":  {
+                                                                             "name":  "Ansel Multiplayer Pausing",
+                                                                             "info":  "Allow Ansel multiplayer pausing.",
+                                                                             "section":  "World Systems",
+                                                                             "type":  "boolean",
+                                                                             "content":  "0"
+                                                                         },
+                                                   "ansel_camera_constraint_distance":  {
+                                                                                            "name":  "Ansel Camera Constraint Distance",
+                                                                                            "info":  "Ansel camera constraint distance.",
+                                                                                            "section":  "World Systems",
+                                                                                            "type":  "text",
+                                                                                            "content":  "500"
+                                                                                        },
+                                                   "rcon_log_commands":  {
+                                                                             "name":  "Log RCON Commands",
+                                                                             "info":  "Enable RCON command logging in the server log.",
+                                                                             "section":  "Remote Access",
+                                                                             "type":  "boolean",
+                                                                             "content":  "1"
+                                                                         },
+                                                   "rcon_max_failed_attempts":  {
+                                                                                    "name":  "Max Failed Attempts",
+                                                                                    "info":  "Failed login attempts before an IP is banned by SourceRCON.",
+                                                                                    "section":  "Remote Access",
+                                                                                    "type":  "text",
+                                                                                    "content":  "5"
+                                                                                },
+                                                   "rcon_timeout":  {
+                                                                        "name":  "RCON Timeout Seconds",
+                                                                        "info":  "Seconds before idle RCON connection is closed.",
+                                                                        "section":  "Remote Access",
+                                                                        "type":  "text",
+                                                                        "content":  "60"
+                                                                    },
+                                                   "rcon_page_timeout":  {
+                                                                             "name":  "RCON Page Timeout Seconds",
+                                                                             "info":  "Seconds before paged RCON responses are removed.",
+                                                                             "section":  "Remote Access",
+                                                                             "type":  "text",
+                                                                             "content":  "5"
+                                                                         },
+                                                   "rcon_max_connections_per_ip":  {
+                                                                                       "name":  "Max RCON Connections Per IP",
+                                                                                       "info":  "Maximum simultaneous RCON connections per IP.",
+                                                                                       "section":  "Remote Access",
+                                                                                       "type":  "text",
+                                                                                       "content":  "3"
+                                                                                   },
+                                                   "rcon_ip_allowlist_a":  {
+                                                                               "name":  "RCON IP Allowlist A",
+                                                                               "info":  "Optional SourceRCON IPAllowList entry. Leave blank unless restricting RCON access.",
+                                                                               "section":  "Remote Access",
+                                                                               "type":  "text",
+                                                                               "content":  ""
+                                                                           },
+                                                   "rcon_ip_allowlist_b":  {
+                                                                               "name":  "RCON IP Allowlist B",
+                                                                               "info":  "Optional second SourceRCON IPAllowList entry. Leave blank unless restricting RCON access.",
+                                                                               "section":  "Remote Access",
+                                                                               "type":  "text",
+                                                                               "content":  ""
+                                                                           },
+                                                   "allowed_character_a":  {
+                                                                               "name":  "Allowed Character A",
+                                                                               "info":  "Optional AllowedCharacters line value. Leave blank unless using character allowlists.",
+                                                                               "section":  "Advanced",
+                                                                               "type":  "text",
+                                                                               "content":  ""
+                                                                           },
+                                                   "disallowed_character_a":  {
+                                                                                  "name":  "Disallowed Character A",
+                                                                                  "info":  "Optional DisallowedCharacters line value. Leave blank unless using character blocklists.",
+                                                                                  "section":  "Advanced",
+                                                                                  "type":  "text",
+                                                                                  "content":  ""
+                                                                              },
+                                                   "allowed_critter_a":  {
+                                                                             "name":  "Allowed Critter A",
+                                                                             "info":  "Optional AllowedCritters line value. Leave blank unless using critter allowlists.",
+                                                                             "section":  "Advanced",
+                                                                             "type":  "text",
+                                                                             "content":  ""
+                                                                         },
+                                                   "disallowed_critter_a":  {
+                                                                                "name":  "Disallowed Critter A",
+                                                                                "info":  "Optional DisallowedCritters line value. Leave blank unless using critter blocklists.",
+                                                                                "section":  "Advanced",
+                                                                                "type":  "text",
+                                                                                "content":  ""
+                                                                            },
+                                                   "default_creator_mode_save":  {
+                                                                                     "name":  "Default Creator Mode Save",
+                                                                                     "info":  "Name of the creator mode save file to load at startup. Leave blank if unused.",
+                                                                                     "section":  "Advanced",
+                                                                                     "type":  "text",
+                                                                                     "content":  ""
+                                                                                 },
+                                                   "webhooks_enabled":  {
+                                                                            "name":  "Enable Webhooks",
+                                                                            "info":  "Master toggle for Path of Titans webhooks. Enable this only after adding at least one webhook URL below.",
+                                                                            "section":  "Chat and Webhooks",
+                                                                            "type":  "boolean",
+                                                                            "content":  "0"
+                                                                        },
+                                                   "webhook_format":  {
+                                                                          "name":  "Webhook Format",
+                                                                          "info":  "Discord formats messages for direct posting to a Discord channel. General sends structured payloads for your own endpoint.",
+                                                                          "section":  "Chat and Webhooks",
+                                                                          "type":  "array",
+                                                                          "dropdown":  "{\"Discord\":\"Discord\",\"General\":\"General\"}"
+                                                                      },
+                                                   "player_chat_webhook":  {
+                                                                               "name":  "Player Chat Webhook URL",
+                                                                               "info":  "Discord or endpoint URL that receives in-game chat. Keep this URL private; anyone with it can post to its channel.",
+                                                                               "section":  "Chat and Webhooks",
+                                                                               "type":  "text",
+                                                                               "content":  ""
+                                                                           },
+                                                   "player_command_webhook":  {
+                                                                                  "name":  "Player Command Webhook URL",
+                                                                                  "info":  "Optional endpoint for messages beginning with the configured command escape character, such as !.",
+                                                                                  "section":  "Chat and Webhooks",
+                                                                                  "type":  "text",
+                                                                                  "content":  ""
+                                                                              },
+                                                   "player_command_escape_chars":  {
+                                                                                       "name":  "Player Command Escape Characters",
+                                                                                       "info":  "Characters that route a chat message to PlayerCommand instead of normal chat. Default ! is retained.",
+                                                                                       "section":  "Chat and Webhooks",
+                                                                                       "type":  "text",
+                                                                                       "content":  "!"
+                                                                                   },
+                                                   "player_report_webhook":  {
+                                                                                 "name":  "Player Report Webhook URL",
+                                                                                 "info":  "Optional endpoint for in-game player reports.",
+                                                                                 "section":  "Chat and Webhooks",
+                                                                                 "type":  "text",
+                                                                                 "content":  ""
+                                                                             },
+                                                   "player_login_webhook":  {
+                                                                                "name":  "Player Login Webhook URL",
+                                                                                "info":  "Optional endpoint for character-selection logins.",
+                                                                                "section":  "Chat and Webhooks",
+                                                                                "type":  "text",
+                                                                                "content":  ""
+                                                                            },
+                                                   "player_logout_webhook":  {
+                                                                                 "name":  "Player Logout Webhook URL",
+                                                                                 "info":  "Optional endpoint for full disconnects.",
+                                                                                 "section":  "Chat and Webhooks",
+                                                                                 "type":  "text",
+                                                                                 "content":  ""
+                                                                             },
+                                                   "player_killed_webhook":  {
+                                                                                 "name":  "Player Killed Webhook URL",
+                                                                                 "info":  "Optional endpoint for player death events.",
+                                                                                 "section":  "Chat and Webhooks",
+                                                                                 "type":  "text",
+                                                                                 "content":  ""
+                                                                             },
+                                                   "admin_command_webhook":  {
+                                                                                 "name":  "Admin Command Webhook URL",
+                                                                                 "info":  "Optional endpoint for admin command events.",
+                                                                                 "section":  "Chat and Webhooks",
+                                                                                 "type":  "text",
+                                                                                 "content":  ""
+                                                                             },
+                                                   "server_error_webhook":  {
+                                                                                "name":  "Server Error Webhook URL",
+                                                                                "info":  "Optional endpoint for server error events.",
+                                                                                "section":  "Chat and Webhooks",
+                                                                                "type":  "text",
+                                                                                "content":  ""
+                                                                            },
+                                                   "security_alert_webhook":  {
+                                                                                  "name":  "Security Alert Webhook URL",
+                                                                                  "info":  "Optional endpoint for security-alert events.",
+                                                                                  "section":  "Chat and Webhooks",
+                                                                                  "type":  "text",
+                                                                                  "content":  ""
+                                                                              }
+                                               }
+                            }
+             }
 }
-

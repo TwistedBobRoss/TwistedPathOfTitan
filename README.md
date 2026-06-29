@@ -49,7 +49,6 @@ blueprints/path-of-titans-gsa-captain-gecko.json
 Set the required GSA config values:
 
 - `auth_token`: Alderon/Path of Titans auth token.
-- `server_guid`: keep the default `{helper.uuid}` unless you need a fixed identity.
 - `map`: `Island` for Gondwa, `Panjura`, `Riparia`, or an exact modded map name.
 - `database`: usually `Remote`.
 
@@ -99,15 +98,15 @@ That gives GameServerApp a separate log directory from the Docker container log 
 
 ## RCON Model
 
-The blueprint passes GSA's query/RCON port and bind-IP values through Captain Gecko's `EXTRA_ARGS`:
+The blueprint keeps Captain Gecko's `EXTRA_ARGS` minimal:
 
 ```text
--QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={machine.ip} -log {config_parameter id="additional_launch_params"}
+-log {config_parameter id="additional_launch_params"}
 ```
 
-Do not copy the query/RCON placeholders into the editable `additional_launch_params` setting. GameServerApp resolves `{gameserver.query_port}` and `{gameserver.rcon_port}` in blueprint-owned fields, but existing saved config text can be inserted literally by the game image. The `additional_launch_params` field is only for extra literal flags that are not already supplied above.
+Do not copy query/RCON placeholders into the editable `additional_launch_params` setting. That field is only for unrelated literal flags.
 
-The generated `Game.ini` also includes `[SourceQuery]` and `[SourceRCON]` sections using GSA variables, including the RCON password.
+The generated `Game.ini` includes `[SourceQuery]` and `[SourceRCON]` sections using GSA variables, including the query port, RCON port, and RCON password. This avoids Captain Gecko's startup command echoing unresolved `{gameserver...}` placeholders while still following Alderon's documented Source Query and Source RCON settings.
 
 GSA monitoring uses Source Query so the dashboard checks the game query port, not only whether the Docker container is running.
 
@@ -118,6 +117,19 @@ GSA command/control uses:
 | Save | `Save` |
 | Broadcast | `Announce {message}` |
 | Stop | `ProfileServer Stop` |
+
+## Admin Setup
+
+The two admin AGID fields write active `ServerAdmins=` lines into `Game.ini`:
+
+```ini
+ServerAdmins={config_parameter id="server_admin_agid_a"}
+ServerAdmins={config_parameter id="server_admin_agid_b"}
+```
+
+Enter Alderon Games IDs, not display names. Path of Titans requires one `ServerAdmins=<AGID>` line per permanent admin, then a server restart. If you need more than two permanent admins, add more `ServerAdmins=<AGID>` lines manually in `Game.ini`.
+
+Live role changes can also be done by an existing admin with `/promote <Username/AGID> <adminrole>` and `/demote <Username/AGID>`, but those roles depend on `Commands.ini`.
 
 ## RCON Command Reference
 

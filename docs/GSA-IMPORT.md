@@ -13,7 +13,6 @@ blueprints/path-of-titans-gsa-captain-gecko.json
 | Parameter | Recommended value | Notes |
 | --- | --- | --- |
 | `auth_token` | Your Alderon token | Required by the Captain Gecko image for Path of Titans install/update. |
-| `server_guid` | `{helper.uuid}` | Keep stable after first production boot if you need persistent identity. |
 | `database` | `Remote` | Use the value expected by your Path of Titans setup. |
 | `map` | `Island` | `Island` is Gondwa. Other examples: `Panjura`, `Riparia`. |
 | `branch` | `production` | Change only when intentionally testing another branch. |
@@ -26,7 +25,8 @@ blueprints/path-of-titans-gsa-captain-gecko.json
 | `reserved_slots` | Number of reserved slots for admins or roles. |
 | `server_discord_invite_code` | Invite code only, not the full Discord URL. |
 | `enforce_whitelist` | Requires `whitelist.txt` entries. |
-| `additional_launch_params` | Optional literal extra startup flags. Do not add `QueryPort`, `QueryIP`, `RconPort`, `RconIP`, `MULTIHOME`, `ServerListIP`, or `-log`; the blueprint already supplies those with GSA variables. |
+| `additional_launch_params` | Optional literal extra startup flags. Do not add `QueryPort`, `QueryIP`, `RconPort`, `RconIP`, or `-log`; the blueprint writes query and RCON settings into `Game.ini`. |
+| `server_admin_agid_a` / `server_admin_agid_b` | Optional permanent admin Alderon Games IDs. The blueprint writes active `ServerAdmins=` lines into `Game.ini`. |
 
 ## Organized Settings
 
@@ -72,6 +72,12 @@ Recommended first checks:
 2. Open the GSA Logs page and check for files under `\serverfiles\PathOfTitans\Saved\Logs`.
 3. Confirm the generated `Game.ini` has `[SourceQuery]` and `[SourceRCON]`.
 4. Test GSA RCON save, broadcast, and stop.
+
+## Updating Existing Servers
+
+After activating a newer blueprint version, re-save or reapply the config template so GSA regenerates `Game.ini`. Existing saved config files may still contain old commented `ServerAdmins` lines or literal query/RCON launch placeholders until the config template is applied again.
+
+Expected startup args should no longer include `-QueryPort={gameserver.query_port}` or `-RconPort={gameserver.rcon_port}`. Query/RCON values should appear in `Game.ini` under `[SourceQuery]` and `[SourceRCON]`.
 
 ## Restart Strategy
 
