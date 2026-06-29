@@ -66,7 +66,7 @@ The blueprint uses Source Query monitoring:
 
 ```json
 "monitoring": {
-  "type": "source_query",
+  "type": "query",
   "recovery_mode": true
 }
 ```
@@ -98,3 +98,4 @@ Suggested acceptance tests:
 ## Known Limit
 
 This blueprint does not create a separate process-capture log because it does not replace Captain Gecko's image. If Captain Gecko's image only exposes stdout and does not leave native log files in `Saved\Logs`, the next step is to test Captain Gecko image-supported launch args while keeping this blueprint Captain-Gecko-based.
+

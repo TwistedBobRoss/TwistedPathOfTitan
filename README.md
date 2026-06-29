@@ -38,7 +38,9 @@ CHANGELOG.md
 
 ## Quick Start
 
-Import this blueprint into GameServerApp:
+For normal hosting, download the Twisted Path of Titans blueprint from the GameServerApp Marketplace in GameServerApp.
+
+Use the repository JSON only for review, development, or manual testing:
 
 ```text
 blueprints/path-of-titans-gsa-captain-gecko.json
@@ -65,6 +67,25 @@ Start the server once and check:
 | `raw` | `7778` | image-dependent | Extra raw/game port exposed by the image |
 | `query` | `27015` | UDP | Source Query |
 | `rcon` | `37015` | TCP | Source RCON for GSA |
+
+## MOTD and Rules Formatting
+
+Path of Titans does not support Markdown or HTML in `MOTD.txt` or `Rules.txt`. Alderon's hosting docs describe a small Path of Titans formatting syntax instead:
+
+| Tag | Effect |
+| --- | --- |
+| `<title>Text</>` | Largest title font size |
+| `<large>Text</>` | Large font size |
+| `<small>Text</>` | Small font size |
+| `<red>Text</>` | Red text |
+| `<orange>Text</>` | Orange text |
+| `<yellow>Text</>` | Yellow text |
+| `<green>Text</>` | Green text |
+| `<blue>Text</>` | Blue text |
+| `<purple>Text</>` | Purple text |
+| `<white>Text</>` | White text |
+
+Formatting cannot be combined or nested. Every formatted line must close with `</>`. For example, `<red>Rule text</>` is valid; `<red>Rule text<>` will show the tag text in-game.
 
 ## Logging Model
 
@@ -148,48 +169,48 @@ Official references:
 
 ## Settings Reference
 
-GameServerApp's public blueprint docs expose config template parameters as ID, name, info, type, and default content. Since no per-parameter tab field is documented, this blueprint organizes the GSA config template with numbered category prefixes in each parameter name. The prefixes keep related settings together while preserving stable parameter IDs for `Game.ini`. Parameter IDs intentionally use only letters and underscores for GSA editor compatibility.
+GameServerApp's public blueprint docs expose config template parameters as ID, name, info, type, and default content. This blueprint also uses GSA `section` values so related Path of Titans settings appear in organized groups while preserving stable parameter IDs for `Game.ini`. Parameter IDs intentionally use only letters and underscores for GSA editor compatibility.
 
-| Prefix | Category | Typical Settings |
-| --- | --- | --- |
-| `01 Required` | Startup and image-required values | Alderon auth token, server GUID, database, branch, launch args |
-| `02 Identity` | Public identity and basic access | map, join password, reserved slots, Discord invite, admin AGIDs |
-| `03 Access` | Player-facing access and UI | whitelist, paid-users-only, chat, name tags, map/minimap/markers |
-| `04 Time & Restart` | World clock and weather | startup time, day/night length, weather duration, restart toggle |
-| `05 Groups` | Group behavior | max group size, carnivore/herbivore restrictions, combat timer, group quests |
-| `06 Growth & Death` | Growth, quest rewards, and death penalties | passive growth, quest multipliers, death marks/growth penalties, fall/permadeath |
-| `07 World & Survival` | Survival pacing and player limits | fish, water, bodies, respawn, AFK, ping, logout, characters, speedhack checks |
-| `08 Caves & Nesting` | Caves, hatchlings, nests | home caves, hatchling caves, cave hunger, nest toggles and core nest tuning |
-| `09 World Systems` | Critters, waystones, trophies, quests | critters, burrows, waystones, trophy cooldowns, POI/explore quests |
-| `10 RCON` | RCON security and logging | command logging, failed attempts, timeouts, max connections, IP allowlist |
-| `11 Advanced Lists` | Optional list-style values | allowed/disallowed characters and critters, creator mode save |
+| Section | Typical Settings |
+| --- | --- |
+| Server Setup | Alderon auth token, database, branch, launch args |
+| Game | map, Discord invite, world clock, weather, auto-restart toggle |
+| Access | password, reserved slots, admin AGIDs, whitelist, chat, name tags, map/minimap/markers |
+| General Gameplay | group size, grouping restrictions, combat timer, group quests |
+| Growth and Death | passive growth, quest multipliers, death penalties, fall/permadeath |
+| World and Survival | fish, water, bodies, respawn, AFK, ping, logout, characters, speedhack checks |
+| Caves and Nesting | home caves, hatchling caves, cave hunger, nest toggles and core nest tuning |
+| World Systems | critters, burrows, waystones, trophy cooldowns, POI/explore quests |
+| Remote Access | RCON command logging, failed attempts, timeouts, max connections, IP allowlist |
+| Chat and Webhooks | webhook toggle, format, chat, command, report, login, logout, death, admin, error, and security endpoints |
+| Advanced | allowed/disallowed characters and critters, creator mode save |
 
 Common beginner-safe settings:
 
 | Setting ID | GSA Label | Default | Notes |
 | --- | --- | --- | --- |
-| `auth_token` | `01 Required - Alderon Auth Token` | blank | Required before first boot. |
-| `map` | `02 Identity - Map` | `Island` | Use `Island`, `Panjura`, `Riparia`, or a modded map name. |
-| `server_password` | `02 Identity - Server Password` | blank | Blank means public. |
-| `reserved_slots` | `02 Identity - Reserved/Admin Slots` | `0` | Pair with roles in `Commands.ini` for reserved slots. |
-| `enforce_whitelist` | `03 Access - Enforce Whitelist` | `0` | Requires entries in `whitelist.txt`. |
-| `allow_chat` | `03 Access - Allow Chat` | `1` | Master chat toggle. |
-| `allow_global_chat` | `03 Access - Global Chat` | `1` | Disable for local/proximity-style communities. |
-| `server_day_length` | `04 Time & Restart - Day Length Minutes` | `60` | Longer values slow the day cycle. |
-| `server_night_length` | `04 Time & Restart - Night Length Minutes` | `30` | Longer values slow the night cycle. |
-| `max_group_size` | `05 Groups - Maximum Group Size` | `10` | Uses Path of Titans group slots. |
-| `passive_growth_per_minute` | `06 Growth & Death - Passive Growth Per Minute` | `0` | `0` disables passive growth. |
-| `quest_growth_multiplier` | `06 Growth & Death - Quest Growth Multiplier` | `1` | Lower or raise quest growth rewards. |
-| `quest_marks_multiplier` | `06 Growth & Death - Quest Marks Multiplier` | `1.0` | Lower or raise quest mark rewards. |
-| `fall_damage` | `06 Growth & Death - Fall Damage` | `1` | Disable only for casual/sandbox servers. |
-| `afk_disconnect_time` | `07 World & Survival - AFK Disconnect Seconds` | `600` | `0` disables AFK disconnect. |
-| `max_client_ping_ms` | `07 World & Survival - Max Client Ping Ms` | `0` | `0` disables ping enforcement. |
-| `home_caves` | `08 Caves & Nesting - Home Caves` | `1` | Core cave system toggle. |
-| `server_nesting` | `08 Caves & Nesting - Nesting` | `1` | Core nesting toggle. |
-| `enable_critters` | `09 World Systems - Critters` | `1` | Disable for troubleshooting world performance. |
-| `enable_waystones` | `09 World Systems - Waystones` | `1` | Core travel system toggle. |
-| `rcon_log_commands` | `10 RCON - Log RCON Commands` | `1` | Helpful for auditing admin actions. |
-| `rcon_ip_allowlist_a` | `10 RCON - IP Allowlist A` | blank | Leave blank unless restricting RCON access to trusted IPs. |
+| `auth_token` | `Alderon Auth Token` | blank | Required before first boot. |
+| `map` | `Map` | `Island` | Use `Island`, `Panjura`, `Riparia`, or a modded map name. |
+| `server_password` | `Server Password` | blank | Blank means public. |
+| `reserved_slots` | `Reserved/Admin Slots` | `0` | Pair with roles in `Commands.ini` for reserved slots. |
+| `enforce_whitelist` | `Enforce Whitelist` | `0` | Requires entries in `whitelist.txt`. |
+| `allow_chat` | `Allow Chat` | `1` | Master chat toggle. |
+| `allow_global_chat` | `Global Chat` | `1` | Disable for local/proximity-style communities. |
+| `server_day_length` | `Day Length Minutes` | `60` | Longer values slow the day cycle. |
+| `server_night_length` | `Night Length Minutes` | `30` | Longer values slow the night cycle. |
+| `max_group_size` | `Maximum Group Size` | `10` | Uses Path of Titans group slots. |
+| `passive_growth_per_minute` | `Passive Growth Per Minute` | `0` | `0` disables passive growth. |
+| `quest_growth_multiplier` | `Quest Growth Multiplier` | `1` | Lower or raise quest growth rewards. |
+| `quest_marks_multiplier` | `Quest Marks Multiplier` | `1.0` | Lower or raise quest mark rewards. |
+| `fall_damage` | `Fall Damage` | `1` | Disable only for casual/sandbox servers. |
+| `afk_disconnect_time` | `AFK Disconnect Seconds` | `600` | `0` disables AFK disconnect. |
+| `max_client_ping_ms` | `Max Client Ping Ms` | `0` | `0` disables ping enforcement. |
+| `home_caves` | `Home Caves` | `1` | Core cave system toggle. |
+| `server_nesting` | `Nesting` | `1` | Core nesting toggle. |
+| `enable_critters` | `Critters` | `1` | Disable for troubleshooting world performance. |
+| `enable_waystones` | `Waystones` | `1` | Core travel system toggle. |
+| `rcon_log_commands` | `Log RCON Commands` | `1` | Helpful for auditing admin actions. |
+| `rcon_ip_allowlist_a` | `RCON IP Allowlist A` | blank | Leave blank unless restricting RCON access to trusted IPs. |
 
 ## Documentation
 
@@ -201,3 +222,4 @@ Common beginner-safe settings:
 ## License
 
 No license has been declared yet. Add one before accepting external contributions.
+

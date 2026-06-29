@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fixed the `MaxCompleteQuestsInLocation` config parameter reference after remote edits.
+- Documented Path of Titans MOTD and Rules formatting: no Markdown/HTML, one Alderon tag at a time, close with `</>`.
+- Restored Marketplace-first install guidance in the README and import guide.
 - Corrected the GameServerApp Source Query monitoring enum from `source_query` to `query`.
 - Added GSA config-template sections so Path of Titans settings appear in organized tabs.
 - Added a Chat & Webhooks section with optional Path of Titans native chat, command, report, login, logout, death, admin-command, server-error, and security-alert webhook settings.
@@ -36,3 +39,4 @@
 ## 0.1.0
 
 - Added initial GameServerApp custom Docker blueprint and docs.
+

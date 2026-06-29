@@ -1,6 +1,8 @@
 # GameServerApp Import Guide
 
-Import this file as a custom Docker blueprint:
+For normal hosting, download the Twisted Path of Titans blueprint from the GameServerApp Marketplace in GSA. The Marketplace copy is the intended install path for production servers.
+
+Use the repository JSON only for review, development, or manual testing:
 
 ```text
 blueprints/path-of-titans-gsa-captain-gecko.json
@@ -28,7 +30,26 @@ blueprints/path-of-titans-gsa-captain-gecko.json
 
 ## Organized Settings
 
-The blueprint exposes granular `Game.ini` controls as GSA config template parameters. To make the setup friendlier for new hosts, every parameter label starts with a numbered category such as `01 Required`, `06 Growth & Death`, or `10 RCON`. This keeps related settings grouped together in the GSA editor while leaving the underlying parameter IDs stable. Parameter IDs use only letters and underscores for GSA editor compatibility.
+The blueprint exposes granular `Game.ini` controls as GSA config template parameters. To make the setup friendlier for new hosts, each parameter includes a `section` value such as `Server Setup`, `Growth and Death`, `Remote Access`, or `Chat and Webhooks`. This lets GSA group related settings into organized sections while leaving the underlying parameter IDs stable. Parameter IDs use only letters and underscores for GSA editor compatibility.
+
+## MOTD and Rules Formatting
+
+Path of Titans does not support Markdown or HTML in `MOTD.txt` or `Rules.txt`. Alderon's docs describe a small Path of Titans formatting syntax instead:
+
+```text
+<title>Largest title text</>
+<large>Large text</>
+<small>Small text</>
+<red>Red text</>
+<orange>Orange text</>
+<yellow>Yellow text</>
+<green>Green text</>
+<blue>Blue text</>
+<purple>Purple text</>
+<white>White text</>
+```
+
+Use only one formatting tag at a time, and close formatted text with `</>`. For example, `<red>Rule text</>` is valid, while `<red>Rule text<>` will render the tag text literally in-game.
 
 ## GSA Directories
 
@@ -55,3 +76,4 @@ Recommended first checks:
 ## Restart Strategy
 
 Routine restarts should be handled by GSA tasks. The default config keeps Path of Titans internal auto-restart disabled to avoid dueling restart systems.
+
