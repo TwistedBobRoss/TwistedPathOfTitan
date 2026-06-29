@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Renamed the editable startup argument field to `additional_launch_params` so old saved `launch_params` values cannot append unresolved query/RCON placeholders after the resolved GSA ports.
 - Fixed the `MaxCompleteQuestsInLocation` config parameter reference after remote edits.
 - Documented Path of Titans MOTD and Rules formatting: no Markdown/HTML, one Alderon tag at a time, close with `</>`.
 - Restored Marketplace-first install guidance in the README and import guide.

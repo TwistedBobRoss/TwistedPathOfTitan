@@ -32,7 +32,7 @@
       "SERVER_NAME": "{gameserver.list_name}",
       "MAX_PLAYERS": "{gameserver.slot_limit}",
       "AG_AUTH_TOKEN": "{config_parameter id=\"auth_token\"}",
-      "EXTRA_ARGS": "-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={machine.ip} -log {config_parameter id=\"launch_params\"}"
+      "EXTRA_ARGS": "-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={machine.ip} -log {config_parameter id=\"additional_launch_params\"}"
     },
     "mounts": {
       "{container.home_root}/serverfiles": "c:/serverfiles"
@@ -115,7 +115,7 @@
         "auth_token": {"name":"Alderon Auth Token","info":"Required. Alderon Games auth token used by AlderonGamesCmd to install and update Path of Titans server files.","section":"Server Setup","type":"text","content":""},
         "database": {"name":"Database Mode","info":"Passed to Captain Gecko pot-server as DATABASE. Use Remote for most community servers; Local is only for local database setups.","section":"Server Setup","type":"array","dropdown":"{\"Remote\":\"Remote\",\"Local\":\"Local\"}"},
         "branch": {"name":"Branch","info":"Path of Titans branch key. Usually production.","section":"Server Setup","type":"text","content":"production"},
-        "launch_params": {"name":"Extra Launch Arguments","info":"Optional extra Path of Titans launch arguments. Required GSA ports, public listing IP, and logging are already added by the blueprint; add only additional literal arguments here.","section":"Server Setup","type":"text","content":""},
+        "additional_launch_params": {"name":"Additional Launch Arguments","info":"Optional literal Path of Titans launch arguments only. Do not add QueryPort, QueryIP, RconPort, RconIP, MULTIHOME, ServerListIP, or -log here; the blueprint already supplies those with real GSA variables.","section":"Server Setup","type":"text","content":""},
         "map": {"name":"Map","info":"Path of Titans internal map name. Use Island for Gondwa, Panjura for Panjura, Riparia for Riparia, or the exact modded map name.","section":"Game","type":"text","content":"Island"},
         "server_password": {"name":"Server Password","info":"Optional join password. Leave blank for public access.","section":"Access","type":"text","content":""},
         "reserved_slots": {"name":"Reserved/Admin Slots","info":"Number of slots reserved exclusively for admins or reserved-slot roles.","section":"Access","type":"text","content":"0"},

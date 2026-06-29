@@ -33,8 +33,10 @@ The blueprint declares an RCON Docker port:
 It passes GSA-owned query/RCON port and bind-IP values through Captain Gecko's `EXTRA_ARGS`:
 
 ```text
--QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -log
+-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={machine.ip} -log {config_parameter id="additional_launch_params"}
 ```
+
+The editable `additional_launch_params` value must stay blank unless you are adding unrelated literal startup flags. Do not put query/RCON placeholders in that field; otherwise they can be appended literally after the resolved port values.
 
 The RCON password is written to `Game.ini`, not passed as a launch argument. Alderon's documentation lists command-line overrides for `-RconPort` and `-RconIP`; it documents the password as the `Password` key under `[SourceRCON]`.
 

@@ -102,8 +102,10 @@ That gives GameServerApp a separate log directory from the Docker container log 
 The blueprint passes GSA's query/RCON port and bind-IP values through Captain Gecko's `EXTRA_ARGS`:
 
 ```text
--QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -log
+-QueryPort={gameserver.query_port} -QueryIP=0.0.0.0 -RconPort={gameserver.rcon_port} -RconIP=0.0.0.0 -MULTIHOME=0.0.0.0 -ServerListIP={machine.ip} -log {config_parameter id="additional_launch_params"}
 ```
+
+Do not copy the query/RCON placeholders into the editable `additional_launch_params` setting. GameServerApp resolves `{gameserver.query_port}` and `{gameserver.rcon_port}` in blueprint-owned fields, but existing saved config text can be inserted literally by the game image. The `additional_launch_params` field is only for extra literal flags that are not already supplied above.
 
 The generated `Game.ini` also includes `[SourceQuery]` and `[SourceRCON]` sections using GSA variables, including the RCON password.
 

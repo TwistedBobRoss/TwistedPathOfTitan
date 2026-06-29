@@ -26,7 +26,7 @@ blueprints/path-of-titans-gsa-captain-gecko.json
 | `reserved_slots` | Number of reserved slots for admins or roles. |
 | `server_discord_invite_code` | Invite code only, not the full Discord URL. |
 | `enforce_whitelist` | Requires `whitelist.txt` entries. |
-| `launch_params` | Passed to Captain Gecko's `EXTRA_ARGS`; defaults wire Source Query and RCON ports/IPs to GSA. |
+| `additional_launch_params` | Optional literal extra startup flags. Do not add `QueryPort`, `QueryIP`, `RconPort`, `RconIP`, `MULTIHOME`, `ServerListIP`, or `-log`; the blueprint already supplies those with GSA variables. |
 
 ## Organized Settings
 
